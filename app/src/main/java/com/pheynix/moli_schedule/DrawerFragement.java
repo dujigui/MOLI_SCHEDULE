@@ -44,7 +44,7 @@ public class DrawerFragement extends Fragment {
     }
 
 
-    public void setUp(int drawerLayoutId,Toolbar toolbar) {
+    public void setUp(int drawerLayoutId, final Toolbar toolbar) {
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(),
                 (DrawerLayout)getActivity().findViewById(drawerLayoutId), toolbar,R.string.drawer_open,R.string.drawer_close){
 
@@ -62,6 +62,14 @@ public class DrawerFragement extends Fragment {
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 getActivity().invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                if (slideOffset<0.4){
+                    toolbar.setAlpha(1-slideOffset);
+                }
             }
         };
 
