@@ -1,0 +1,10 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:id="@+id/id_fragment_drawer"
+    android:layout_height="match_parent"
+    android:background="@color/material_deep_teal_500"
+    tools:context="com.pheynix.moli_schedule.DrawerFragement">
+
+
+</FrameLayout>
