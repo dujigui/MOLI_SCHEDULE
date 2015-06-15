@@ -1,40 +1,19 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/id_drawer_layout"
+<android.support.v4.widget.DrawerLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <include layout="@layout/main_content_layout"/>
 
-    <LinearLayout
-        android:fitsSystemWindows="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/id_tool_bar"
-            layout="@layout/tool_bar" />
-
-        <TextView
-            android:text="Nothing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-
-    <fragment
-        android:id="@+id/id_drawer_fragment_in_drawer_layout"
-        android:name="com.pheynix.moli_schedule.DrawerFragement"
-        android:layout_width="match_parent"
+    <android.support.design.widget.NavigationView
+        android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:layout="@layout/fragment_drawer"
-        tools:layout="@layout/fragment_drawer"></fragment>
+        app:headerLayout="@layout/navigation_header"
+        app:menu="@menu/navigation_menu"
+
+        />
 
 </android.support.v4.widget.DrawerLayout>
-
-
-
-
