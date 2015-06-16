@@ -1,25 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="@drawable/drawer_header_bg"
-    android:orientation="vertical"
+    android:background="@drawable/drawer_background"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/id_user_avatar"
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:layout_centerVertical="true"
+        android:elevation="4dp"
         android:src="@drawable/user_avatar"
-        app:border_width="2dp"
-        app:border_color="#ffffff"/>
+        app:border_color="#ffffff"
+        app:border_width="2dp" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="userName@moli.com"
-        android:textSize="20sp"/>
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/id_user_avatar"
+        android:layout_marginTop="10dp"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/id_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="MOLI"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+        <TextView
+            android:id="@+id/id_user_motto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You know nothing,Jon Snow"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
