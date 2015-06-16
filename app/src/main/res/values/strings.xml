@@ -16,4 +16,13 @@
     <string name="schedule">日程</string>
     <string name="record">记录</string>
     <string name="summary">总结</string>
+
+    <string-array name="tabs_titles">
+        <item>日程</item>
+        <item>记录</item>
+        <item>总结</item>
+    </string-array>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
