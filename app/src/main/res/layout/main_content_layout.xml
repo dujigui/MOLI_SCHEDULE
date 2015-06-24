@@ -43,10 +43,13 @@
         android:id="@+id/id_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:fabSize="normal"
         android:src="@drawable/ic_add_white_48dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="30dp"
-        app:elevation="6dp"
+        app:elevation="4dp"
+        app:borderWidth="0dp"
         app:pressedTranslationZ="12dp"/>
+
 
 </android.support.design.widget.CoordinatorLayout>
