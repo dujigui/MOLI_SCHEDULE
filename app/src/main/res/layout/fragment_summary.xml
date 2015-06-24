@@ -4,9 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
-        android:text="Schedule"
+        android:text="Summary"
         android:gravity="center"
-        android:background="#E3D8F1"
+        android:background="#B0BCFF"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
