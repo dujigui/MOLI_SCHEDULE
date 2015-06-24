@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <!--<de.hdodenhof.circleimageview.CircleImageView-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:id="@+id/id_schedule_done"-->
+        <!--android:src="@drawable/ic_schedule_done"-->
+        <!--app:border_width="2dp"-->
+        <!--app:border_color="#ffffff"/>-->
+
+    <LinearLayout
+        android:id="@+id/container_circleImageView"
+        android:layout_width="50dp"
+        android:gravity="center"
+        android:layout_height="50dp">
+
+        <com.alexzh.circleimageview.CircleImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:clickable="true"
+            android:id="@+id/id_schedule_done"
+            android:src="@drawable/ic_schedule_done"
+            app:view_border="false"
+            app:view_backgroundColor="@color/colorPrimary"
+            />
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/id_schedule_info"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@id/container_circleImageView"
+        android:gravity="center_vertical"
+        android:text="8:00 - lunch with Sarah"/>
+
+</RelativeLayout>
