@@ -25,4 +25,8 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_create_schedule">新建日程</string>
+    <string name="schedule_detail">请输入日程内容</string>
+    <string name="time_last">持续时间</string>
+    <string name="time_start">开始时间</string>
 </resources>

@@ -36,7 +36,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         ScheduleInfo currentSchedule = schedules.get(position);
         holder.detail.setText(currentSchedule.getDetail());
 //        holder.ic_done.setImageDrawable(mContext.getResources().getDrawable(currentSchedule.getImgId()));
-        holder.ic_done.setImageResource(currentSchedule.getImgId());
+
+//        holder.ic_done.setImageResource(currentSchedule.getImgId());
     }
 
     @Override

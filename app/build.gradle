@@ -29,4 +29,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.3.0'//圆形ImageView，使用：NavigationDrawer
 
     compile 'com.alexzh:circleimageview:1.0.0@aar'//另一个圆形ImageView，使用：ScheduleFragment
+
+    compile 'com.wdullaer:materialdatetimepicker:1.3.1'//日期选择器，Support for Android 4.0 and up.
 }

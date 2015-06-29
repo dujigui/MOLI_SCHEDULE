@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setUpDrawer();
 
 
-
     }
 
     private void initView() {

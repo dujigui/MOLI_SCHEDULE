@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:theme="@style/MaterialStylesNoTranslucentStatus"
+            android:name=".CreateSchedule"
+            android:label="@string/title_activity_create_schedule" >
+        </activity>
     </application>
 
 </manifest>

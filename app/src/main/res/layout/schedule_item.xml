@@ -26,7 +26,7 @@
             android:layout_height="35dp"
             android:clickable="true"
             android:id="@+id/id_schedule_done"
-            android:src="@drawable/ic_schedule_done"
+            android:src="@drawable/ic_done"
             app:view_border="false"
             app:view_backgroundColor="@color/colorPrimary"
             />
