@@ -23,10 +23,22 @@
         <item>总结</item>
     </string-array>
 
+    <string-array name="week">
+        <item>星期天</item>
+        <item>星期一</item>
+        <item>星期二</item>
+        <item>星期三</item>
+        <item>星期四</item>
+        <item>星期五</item>
+        <item>星期六</item>
+    </string-array>
+
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_create_schedule">新建日程</string>
     <string name="schedule_detail">请输入日程内容</string>
     <string name="time_last">持续时间</string>
     <string name="time_start">开始时间</string>
+    <string name="title_activity_create_schedule_category">新建日程类</string>
+
 </resources>

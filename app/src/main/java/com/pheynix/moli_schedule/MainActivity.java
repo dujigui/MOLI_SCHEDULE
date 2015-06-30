@@ -1,5 +1,7 @@
 package com.pheynix.moli_schedule;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabs;
     private MainContentPageAdapter mPageAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
+    private DBUtil dbUtil;
 
 
     @Override
@@ -29,13 +32,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dbUtil = new DBUtil(this);
 
+        if (isFirstLaunch()){
+            initCategory();
+        }
+        
         initView();
 
         setUpDrawer();
 
-
     }
+
 
     private void initView() {
         //设置新的Toolbar
@@ -56,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.setAdapter(mPageAdapter);
         tabs.setupWithViewPager(mViewPager);
+
+
     }
 
 
@@ -116,5 +126,25 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private void initCategory() {
+        Category category_normal = new Category("普通日程","-1","-1","-1","-1");
+        dbUtil.addCategory(category_normal);
+
+        Category category_new = new Category("新建日程","-1","-1","-1","-1");
+        dbUtil.addCategory(category_new);
+    }
+
+    public boolean isFirstLaunch() {
+
+        SharedPreferences sharedPreferences = getSharedPreferences("pre_first_launch", Context.MODE_PRIVATE);
+        boolean isFirstLaunch = sharedPreferences.getBoolean("isFirstLaunch",true);
+
+        if (isFirstLaunch){
+            sharedPreferences.edit().putBoolean("isFirstLaunch",false).commit();
+        }
+
+        return isFirstLaunch;
     }
 }

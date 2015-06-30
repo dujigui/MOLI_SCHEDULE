@@ -31,15 +31,15 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    public ArrayList<ScheduleInfo> getData() {
-        ArrayList<ScheduleInfo> scheduleInfos = new ArrayList<>();
+    public ArrayList<Schedule> getData() {
+        ArrayList<Schedule> schedules = new ArrayList<>();
 //
 //        for (int i = 0; i < 20; i++) {
-//            ScheduleInfo scheduleInfo = new ScheduleInfo("20:0" + i + " - go for lunch", R.drawable.ic_schedule_done);
-//            scheduleInfos.add(scheduleInfo);
+//            Schedule scheduleInfo = new Schedule("20:0" + i + " - go for lunch", R.drawable.ic_schedule_done);
+//            schedules.add(scheduleInfo);
 //        }
 
-        return scheduleInfos;
+        return schedules;
     }
 
     @Override

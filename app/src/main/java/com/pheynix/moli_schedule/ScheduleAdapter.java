@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder> {
     private Context mContext;
-    private List<ScheduleInfo> schedules = new ArrayList<ScheduleInfo>();
+    private List<Schedule> schedules = new ArrayList<Schedule>();
 
-    public ScheduleAdapter(Context mContext, List<ScheduleInfo> schedules) {
+    public ScheduleAdapter(Context mContext, List<Schedule> schedules) {
         this.mContext = mContext;
         this.schedules = schedules;
     }
@@ -33,7 +33,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
 
     @Override
     public void onBindViewHolder(ScheduleViewHolder holder, int position) {
-        ScheduleInfo currentSchedule = schedules.get(position);
+        Schedule currentSchedule = schedules.get(position);
         holder.detail.setText(currentSchedule.getDetail());
 //        holder.ic_done.setImageDrawable(mContext.getResources().getDrawable(currentSchedule.getImgId()));
 
