@@ -163,51 +163,6 @@ public class CreateScheduleCategory extends AppCompatActivity implements View.On
                 finish();
 
                 break;
-
-
-//            case R.id.btn_create_category_periodicity:
-//                Dialog dialog_periodicity = new Dialog(CreateScheduleCategory.this);
-//                final ListView listView = new ListView(CreateScheduleCategory.this);
-//                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CreateScheduleCategory.this,R.array.week,android.R.layout.simple_list_item_1);
-//                listView.setAdapter(adapter);
-//                dialog_periodicity.setContentView(listView);
-//                dialog_periodicity.title("请选择周期");
-//                dialog_periodicity.setCancelable(true);
-//                dialog_periodicity.positiveAction("确定");
-//                dialog_periodicity.negativeAction("取消");
-//                dialog_periodicity.positiveActionClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                    }
-//                });
-//                listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-//                listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-//                    @Override
-//                    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-//
-//                    }
-//
-//                    @Override
-//                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public void onDestroyActionMode(ActionMode mode) {
-//
-//                    }
-//                });
-//                break;
         }
 
     }

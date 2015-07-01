@@ -13,13 +13,16 @@ public class Schedule {
 
     private String category;//日程属于什么类别
     private String detail;//日程具体内容
-    private int time_start;//201506280859,日期＋时间，取出来后分割
-    private int time_last;//分钟
+    private String time_start;//2015 06 28 08 59,日期＋时间，取出来后分割
+    private String time_last;//分钟
     private int urgency;//0==空 1==紧急重要 2==不紧急重要 3==紧急不重要 4==不紧急不重要
     private boolean vibration;//是否震动提示
-    private int volume;//提示声音的大小
+    private int volume;//提示声音的大小1~100
 
-    public Schedule(String category, String detail, int time_start, int time_last, int urgency, boolean vibration, int volume) {
+    public Schedule() {
+    }
+
+    public Schedule(String category, String detail, String time_start, String time_last, int urgency, boolean vibration, int volume) {
         this.category = category;
         this.detail = detail;
         this.time_start = time_start;
@@ -45,19 +48,19 @@ public class Schedule {
         this.detail = detail;
     }
 
-    public long getTime_start() {
+    public String getTime_start() {
         return time_start;
     }
 
-    public void setTime_start(int time_start) {
+    public void setTime_start(String time_start) {
         this.time_start = time_start;
     }
 
-    public int getTime_last() {
+    public String getTime_last() {
         return time_last;
     }
 
-    public void setTime_last(int time_last) {
+    public void setTime_last(String time_last) {
         this.time_last = time_last;
     }
 

@@ -71,6 +71,19 @@ public class DBUtil {
 
     }
 
+    public  void addSchedule(Schedule schedule){
+        ContentValues values = new ContentValues();
+        values.put(openHelper.CATEGORY,schedule.getCategory());
+        values.put(openHelper.DETAIL,schedule.getDetail());
+        values.put(openHelper.TIME_START,schedule.getTime_start());
+        values.put(openHelper.TIME_LAST,schedule.getTime_last());
+        values.put(openHelper.URGENCY,schedule.getUrgency());
+        values.put(openHelper.VIBRATION,schedule.isVibration());
+        values.put(openHelper.VOLUME,schedule.getVolume());
+
+        db.insert(openHelper.TABLE_NAME_SCHEDULE,null,values);
+    }
+
 
 
 

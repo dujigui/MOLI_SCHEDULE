@@ -1,16 +1,21 @@
 package com.pheynix.moli_schedule;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rey.material.widget.Slider;
 import com.rey.material.widget.Spinner;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -29,24 +34,28 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     private ImageView ic_quadrant_1_1,ic_quadrant_0_1,ic_quadrant_1_0,ic_quadrant_0_0;
     private FloatingActionButton mFab;
     private Spinner spinner_category;
-//    private SharedPreferences sharedPreferences;
-//    private SharedPreferences.Editor editor;
-//    private String[] category;
+    private EditText et_schedule_detail;
     private ArrayAdapter<String> spinnerAdapter;
     private ArrayList<String> category;
+    private Schedule newSchedule;
+    private Slider slider_volume;
+    private SwitchCompat switch_vibration;
 
-
-//    private static final String PRE_NAME = "create_schedule_preferences";
-    private static final String SCHEDULE_CATEGORY = "category";
-    private static final String DEFAULT_CATEGORY_NORMAL = "普通日程";
-    private static final String DEFAULT_CATEGORY_NEW = "新日程类";
+    private static final String PRE_CREATE_SCHEDULE = "create_schedule";
+    private static final String VOLUME = "volume";
+    private static final String VIBRATION = "vibration";
+    private StringBuffer dataBuffer;
+    private StringBuffer timeBuffer;
+    private DBUtil dbUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_schedule);
 
-        //初始化应该在所有操作前
+        dbUtil = new DBUtil(this);
+
+        //初始化应该尽量在所有操作前
         initView();
 
     }
@@ -108,24 +117,13 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
                         } else {
                             tv_time_last.setText(i + "时" + i1 + "分");
                         }
+                        timeBuffer = new StringBuffer(i+" "+i1);
 
                     }
                 }, 0, 0, true);
                 dialog.show(getFragmentManager(), "time_picker_dialog_time_last");
             }
         });
-
-//        sharedPreferences = getSharedPreferences(PRE_NAME, Context.MODE_PRIVATE);
-//        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-//        editor = sharedPreferences.edit();
-//        editor.clear();
-//
-//        category = preferenceToString(sharedPreferences);
-//
-//        spinner_category = (Spinner) findViewById(R.id.spinner_category);
-//        spinnerAdapter = new ArrayAdapter<String>(CreateSchedule.this,android.R.layout.simple_spinner_dropdown_item,category);
-//        spinner_category.setAdapter(spinnerAdapter);
-//        spinner_category.setOnItemClickListener(this);
 
         spinner_category = (Spinner) findViewById(R.id.spinner_category);
         category = new DBUtil(this).getAllCategoryName();
@@ -135,7 +133,18 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
 
         //FloatingActionBar响应逻辑，1保存当前日程2保存当前的偏好设置（是否新建日程类、提示音大小、震动）
         mFab = (FloatingActionButton) findViewById(R.id.fab_create_schedule);
+        mFab.setOnClickListener(this);
 
+        et_schedule_detail = (EditText) findViewById(R.id.et_schedule_detail);
+        slider_volume = (Slider) findViewById(R.id.slider_volume);
+        switch_vibration = (SwitchCompat) findViewById(R.id.switch_vibration);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(PRE_CREATE_SCHEDULE, Context.MODE_PRIVATE);
+
+        switch_vibration.setChecked(sharedPreferences.getBoolean(VIBRATION,true));
+        slider_volume.setValue((float)sharedPreferences.getInt(VOLUME,50),false);
+
+        newSchedule = new Schedule();
     }
 
     //开始时间－选择日期的Dialog
@@ -156,6 +165,8 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int i, int i1, int i2) {
         date = i+"年"+i1+"月"+i2+"日";
+        dataBuffer = new StringBuffer(i+" "+i1+" "+i2 +" ");
+
         showTimePickerDialog();
 
     }
@@ -165,6 +176,7 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int i, int i1) {
         time = i+"时"+i1+"分";
         tv_time_start.setText(date+time);
+        dataBuffer.append(i+" "+i1);
     }
 
     //点击重要紧急度按钮的响应动作之前，把所有文字隐藏
@@ -189,12 +201,12 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
                 tv_quadrant_1_1.setVisibility(View.VISIBLE);
                 break;
             //重要－不紧急
-            case R.id.ic_quadrant_0_1:
-                tv_quadrant_0_1.setVisibility(View.VISIBLE);
-                break;
-            //不重要－紧急
             case R.id.ic_quadrant_1_0:
                 tv_quadrant_1_0.setVisibility(View.VISIBLE);
+                break;
+            //不重要－紧急
+            case R.id.ic_quadrant_0_1:
+                tv_quadrant_0_1.setVisibility(View.VISIBLE);
                 break;
             //不重要－不紧急
             case R.id.ic_quadrant_0_0:
@@ -203,11 +215,41 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
             //FloatingActionBar响应逻辑
             case R.id.fab_create_schedule:
 
-//                editor = sharedPreferences.edit();
-//                editor.putString(SCHEDULE_CATEGORY,DEFAULT_CATEGORY_NORMAL + " " + DEFAULT_CATEGORY_NEW + " " + );
+                newSchedule.setCategory(category.get(spinner_category.getSelectedItemPosition()));
+                newSchedule.setDetail(et_schedule_detail.getText().toString());
+                newSchedule.setTime_start(dataBuffer.toString());
+                newSchedule.setTime_last(timeBuffer.toString());
+                newSchedule.setUrgency(getUrgency());
+                newSchedule.setVibration(switch_vibration.isChecked());
+                newSchedule.setVolume(slider_volume.getValue());
+                dbUtil.addSchedule(newSchedule);
+
+                SharedPreferences sharedPreferences = getSharedPreferences(PRE_CREATE_SCHEDULE,Context.MODE_PRIVATE);
+                sharedPreferences.edit().putInt(VOLUME,slider_volume.getValue()).commit();
+                sharedPreferences.edit().putBoolean(VIBRATION,switch_vibration.isChecked()).commit();
+
+                Toast.makeText(this,"日程创建成功！",Toast.LENGTH_SHORT).show();
+                finish();
 
                 break;
         }
+    }
+
+    private int getUrgency() {
+        if (tv_quadrant_1_1.getVisibility() == View.VISIBLE){
+            return 1;
+        }
+        if (tv_quadrant_1_0.getVisibility() == View.VISIBLE){
+            return 2;
+        }
+        if (tv_quadrant_0_1.getVisibility() == View.VISIBLE){
+            return 3;
+        }
+        if (tv_quadrant_0_0.getVisibility() == View.VISIBLE){
+            return 4;
+        }
+
+        return 0;
     }
 
 
@@ -219,46 +261,9 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
 
                 break;
             case 1:
-
                 //跳转到新的Activity完成Category的创建
                 Intent intent = new Intent(this,CreateScheduleCategory.class);
                 startActivityForResult(intent,001);
-
-
-                //inflate dialog要用到的view
-//                LayoutInflater inflater = getLayoutInflater();
-//                final View dialogView = inflater.inflate(R.layout.schedule_category_create_dialog,null);
-//
-//                final Dialog dialog = new Dialog(this);
-//                dialog.setTitle("新日程类");
-//                dialog.positiveAction("确定");
-//                dialog.negativeAction("取消");
-//                dialog.positiveActionClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        EditText editText = (EditText) dialogView.findViewById(R.id.category_create_dialog_edit_text);
-//                        addScheduleCategory(sharedPreferences,editor,editText.getText().toString());
-//
-//                        Toast.makeText(CreateSchedule.this,"新日程类已增加!",Toast.LENGTH_SHORT).show();
-//
-//                        category = preferenceToString(getSharedPreferences(PRE_NAME, Context.MODE_PRIVATE));
-//                        spinnerAdapter.notifyDataSetChanged();
-//                        dialog.dismiss();
-//                    }
-//                });
-//                dialog.negativeActionClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        spinner_category.setSelection(0);
-//                        dialog.dismiss();
-//                    }
-//                });
-//                dialog.setContentView(dialogView);
-//                dialog.cancelable(false);
-//                dialog.show();
-
-
                 break;
             default:
 
@@ -266,39 +271,6 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
         }
         return true;
     }
-
-//    private String[] preferenceToString(SharedPreferences sharedPreferences){
-//        String sharedPreferencesString = sharedPreferences.getString(SCHEDULE_CATEGORY, DEFAULT_CATEGORY_NORMAL + " " + DEFAULT_CATEGORY_NEW);//默认显示“普通日程”和“新日程类"
-//        return sharedPreferencesString.split(" ");
-//    }
-
-//    private void addScheduleCategory(SharedPreferences sharedPreferences,SharedPreferences.Editor editor,String newCategory){
-//        String[] oldCategory = preferenceToString(sharedPreferences);
-//        StringBuffer buffer = new StringBuffer();
-//
-//        for (int i = 0 ; i<oldCategory.length ; i++){
-//            buffer.append(oldCategory[i]);
-//            buffer.append(" ");
-//        }
-//
-//        editor.clear();
-//        buffer.append(newCategory);
-//        editor.putString(SCHEDULE_CATEGORY,buffer.toString());
-//        editor.commit();
-//        editor.clear();
-
-//    }
-
-
-//add on Change Listener
-//    share.registerOnSharedPreferenceChangeListener(mListener);
-
-
-//remove on Change Listener
-//    preferences.unregisterOnSharedPreferenceChangeListener(mListener);
-
-    // listener example
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -310,11 +282,14 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
             category = new DBUtil(this).getAllCategoryName();
             ArrayAdapter<String> newAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,category);
             spinner_category.setAdapter(newAdapter);
+            spinner_category.setSelection(category.size()-1);
+
+
         }
         //创建取消更新spinner
         if (resultCode == 003){
             spinner_category.setSelection(0);
-            new TestMessage(CreateSchedule.this,"wuwu");
+            new TestMessage(CreateSchedule.this,"已取消创建新日程类");
         }
     }
 }

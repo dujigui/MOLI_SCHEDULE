@@ -43,6 +43,7 @@
             app:rd_style="@style/Material.Drawable.Ripple.Wave"/>
 
         <EditText
+            android:id="@+id/et_schedule_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/schedule_detail" />
@@ -220,6 +221,7 @@
             <!--android:layout_weight="1" />-->
 
         <com.rey.material.widget.Slider
+            android:id="@+id/slider_volume"
             style="@style/Material.Widget.Slider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -229,14 +231,9 @@
             app:sl_maxValue="100"
             app:sl_value="50"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingRight="10dp"
-            android:text="震动" />
-
         <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_vibration"
+            android:text="震动"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
