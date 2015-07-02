@@ -9,16 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by pheynix on 6/24/15.
  */
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder> {
     private Context mContext;
-    private List<Schedule> schedules = new ArrayList<Schedule>();
+    private ArrayList<Schedule> schedules = new ArrayList<>();
+    private Schedule currentSchedule;
 
-    public ScheduleAdapter(Context mContext, List<Schedule> schedules) {
+    public ScheduleAdapter(Context mContext, ArrayList<Schedule> schedules) {
         this.mContext = mContext;
         this.schedules = schedules;
     }
@@ -26,18 +26,20 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
     @Override
     public ScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.schedule_item, parent,false);
+        View view = inflater.inflate(R.layout.schedule_item, parent, false);
         ScheduleViewHolder scheduleViewHolder = new ScheduleViewHolder(view);
         return scheduleViewHolder;
     }
 
     @Override
     public void onBindViewHolder(ScheduleViewHolder holder, int position) {
-        Schedule currentSchedule = schedules.get(position);
-        holder.detail.setText(currentSchedule.getDetail());
-//        holder.ic_done.setImageDrawable(mContext.getResources().getDrawable(currentSchedule.getImgId()));
+        currentSchedule = schedules.get(position);
 
-//        holder.ic_done.setImageResource(currentSchedule.getImgId());
+        holder.iv_urgency.setImageResource(getUrgencyImage());
+        holder.tv_time_start.setText(getTimeStart());
+        holder.tv_time_last.setText(getTimeLast());
+        holder.tv_schedule_detail.setText(currentSchedule.getDetail());
+
     }
 
     @Override
@@ -45,14 +47,49 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         return schedules.size();
     }
 
-    class ScheduleViewHolder extends RecyclerView.ViewHolder{
-        TextView detail;
-        ImageView ic_done;
+    class ScheduleViewHolder extends RecyclerView.ViewHolder {
+        ImageView iv_urgency;
+        TextView tv_schedule_detail, tv_time_start, tv_time_last;
+
 
         public ScheduleViewHolder(View itemView) {
             super(itemView);
-            ic_done = (ImageView) itemView.findViewById(R.id.id_schedule_done);
-            detail = (TextView) itemView.findViewById(R.id.id_schedule_info);
+
+            iv_urgency = (ImageView) itemView.findViewById(R.id.iv_urgency);
+            tv_schedule_detail = (TextView) itemView.findViewById(R.id.tv_schedule_detail);
+            tv_time_start = (TextView) itemView.findViewById(R.id.tv_time_start);
+            tv_time_last = (TextView) itemView.findViewById(R.id.tv_time_last);
+
+        }
+    }
+
+    private int getUrgencyImage() {
+
+        switch (currentSchedule.getUrgency()) {
+            case 1:
+                return R.drawable.ic_ring_1_1;
+            case 2:
+                return R.drawable.ic_ring_1_0;
+            case 3:
+                return R.drawable.ic_ring_0_1;
+            case 4:
+                return R.drawable.ic_ring_0_0;
+            default:
+                return R.drawable.ic_ring_1_1;
+        }
+    }
+
+    private String getTimeStart() {
+        String[] date = currentSchedule.getTime_start().split(" ");
+        return date[0] + "年" + date[1] + "月" + date[2] + "日" + date[3] + "时" + date[4] + "分";
+    }
+
+    private String getTimeLast() {
+        String[] time = currentSchedule.getTime_last().split(" ");
+        if (time[0].equals(" ")) {
+            return time[1] + "分";
+        } else {
+            return time[0] + "时" + time[1] + "分";
         }
     }
 }

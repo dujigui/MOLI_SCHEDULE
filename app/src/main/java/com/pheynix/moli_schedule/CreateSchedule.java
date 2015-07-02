@@ -229,6 +229,11 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
                 sharedPreferences.edit().putBoolean(VIBRATION,switch_vibration.isChecked()).commit();
 
                 Toast.makeText(this,"日程创建成功！",Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent();
+                intent.putExtra("isCreated",true);
+                setResult(005,intent);
+
                 finish();
 
                 break;

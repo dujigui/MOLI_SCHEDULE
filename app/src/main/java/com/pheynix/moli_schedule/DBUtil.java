@@ -35,10 +35,6 @@ public class DBUtil {
         db = openHelper.getWritableDatabase();
     }
 
-    //在构造函数完成数据库实例化
-//    private SQLiteDatabase getDatabase(DatabaseOpenHelper openHelper){
-//        return openHelper.getWritableDatabase();
-//    }
 
     public void insertData(Schedule schedule){
         ContentValues values = new ContentValues();
@@ -84,7 +80,38 @@ public class DBUtil {
         db.insert(openHelper.TABLE_NAME_SCHEDULE,null,values);
     }
 
+    public ArrayList<Schedule> getAllSchedules(){
+        ArrayList<Schedule> schedules = new ArrayList<>();
+        Cursor cursor = db.query(openHelper.TABLE_NAME_SCHEDULE,
+                new String[]{openHelper.CATEGORY,openHelper.DETAIL,openHelper.TIME_START
+                        ,openHelper.TIME_LAST,openHelper.URGENCY,openHelper.VIBRATION,openHelper.VOLUME},
+                null,null,null,null,null);
+        while (cursor.moveToNext()){
+            Schedule schedule = new Schedule();
+            schedule.setCategory(cursor.getString(cursor.getColumnIndex(openHelper.CATEGORY)));
+            schedule.setDetail(cursor.getString(cursor.getColumnIndex(openHelper.DETAIL)));
+            schedule.setTime_start(cursor.getString(cursor.getColumnIndex(openHelper.TIME_START)));
+            schedule.setTime_last(cursor.getString(cursor.getColumnIndex(openHelper.TIME_LAST)));
+            schedule.setUrgency(cursor.getInt(cursor.getColumnIndex(openHelper.URGENCY)));
+            schedule.setVibration(getVibration(cursor));//数据库保存值为1或0，有时间测试Boolean.parse是否有效
+            schedule.setVolume(cursor.getInt(cursor.getColumnIndex(openHelper.VOLUME)));
+            schedules.add(schedule);
+        }
 
+        return schedules;
+    }
+
+    private boolean getVibration(Cursor cursor) {
+
+        switch (cursor.getInt(cursor.getColumnIndex(openHelper.VIBRATION))){
+            case 1:
+                return true;
+            case 0:
+                return false;
+            default:
+                return true;
+        }
+    }
 
 
     class DatabaseOpenHelper extends SQLiteOpenHelper {

@@ -1,47 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:layout_margin="10dp"
+    android:orientation="horizontal">
 
-
-    <!--<de.hdodenhof.circleimageview.CircleImageView-->
-        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-        <!--android:layout_width="50dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:id="@+id/id_schedule_done"-->
-        <!--android:src="@drawable/ic_schedule_done"-->
-        <!--app:border_width="2dp"-->
-        <!--app:border_color="#ffffff"/>-->
-
-    <LinearLayout
-        android:id="@+id/container_circleImageView"
+    <RelativeLayout
+        android:id="@+id/container_civ_urgency"
         android:layout_width="50dp"
-        android:gravity="center"
-        android:layout_height="50dp">
-
-        <com.alexzh.circleimageview.CircleImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:clickable="true"
-            android:id="@+id/id_schedule_done"
-            android:src="@drawable/ic_done"
-            app:view_border="false"
-            app:view_backgroundColor="@color/colorPrimary"
-            />
-
-    </LinearLayout>
-
-
-
-    <TextView
-        android:id="@+id/id_schedule_info"
-        android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_toRightOf="@id/container_circleImageView"
-        android:gravity="center_vertical"
-        android:text="8:00 - lunch with Sarah"/>
+        android:layout_gravity="center"
+        android:layout_marginRight="10dp"
+        android:gravity="center">
 
-</RelativeLayout>
+        <!--<de.hdodenhof.circleimageview.CircleImageView-->
+            <!--android:id="@+id/civ_urgency"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:src="@drawable/ic_done"-->
+            <!--app:border_width="5dp"-->
+            <!--app:border_color="@color/colorQuadrant_1_1"/>-->
+
+        <ImageView
+            android:id="@+id/iv_urgency"
+            android:src="@drawable/ic_ring_1_1"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_toRightOf="@id/container_civ_urgency">
+
+        <TextView
+            android:id="@+id/tv_time_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="显示开始时间" />
+
+        <TextView
+            android:id="@+id/tv_time_last"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="显示持续时间" />
+
+        <TextView
+            android:id="@+id/tv_schedule_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="显示日程详细信息" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

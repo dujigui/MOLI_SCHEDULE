@@ -9,4 +9,10 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>
     <color name="colorDivider">#B6B6B6</color>
+
+    <color name="colorQuadrant_1_1">#D06B6B</color>
+    <color name="colorQuadrant_1_0">#D7CF5C</color>
+    <color name="colorQuadrant_0_1">#81A7EB</color>
+    <color name="colorQuadrant_0_0">#A8CD67</color>
+
 </resources>

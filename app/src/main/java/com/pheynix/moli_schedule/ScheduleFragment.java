@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,34 +18,67 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
     private RecyclerView mRecyclerView;
     private ScheduleAdapter adapter;
     private FloatingActionButton mFab;
+    private DBUtil dbUtil;
+    private ArrayList<Schedule> schedules;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerView_schedule);
+
+        dbUtil = new DBUtil(getActivity());
+        schedules = dbUtil.getAllSchedules();
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_schedule);
         mFab = (FloatingActionButton) view.findViewById(R.id.id_fab_fragment_schedule);
         mFab.setOnClickListener(this);
 
-        adapter = new ScheduleAdapter(getActivity(), getData());
+        //设置recyclerView的layoutManager
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        adapter = new ScheduleAdapter(getActivity(),schedules);
         mRecyclerView.setAdapter(adapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),LinearLayoutManager.VERTICAL));
+
+        mRecyclerView.setOnClickListener(this);
+
         return view;
     }
 
-    public ArrayList<Schedule> getData() {
-        ArrayList<Schedule> schedules = new ArrayList<>();
-//
-//        for (int i = 0; i < 20; i++) {
-//            Schedule scheduleInfo = new Schedule("20:0" + i + " - go for lunch", R.drawable.ic_schedule_done);
-//            schedules.add(scheduleInfo);
-//        }
-
-        return schedules;
-    }
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getActivity(),CreateSchedule.class);
-        startActivity(intent);
+
+        switch (v.getId()){
+            case R.id.id_fab_fragment_schedule:
+
+                //启动创建Schedule的Activity
+                Intent intent = new Intent(getActivity(),CreateSchedule.class);
+                startActivityForResult(intent, 004);
+
+                break;
+            case R.id.rv_schedule:
+
+                new TestMessage(getActivity(),"haha");
+
+                break;
+        }
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //日程创建后，更新schedules的数据，不能简单地更改schedules的指向，必须清空schedules并重新添加数据
+        //详细原因在http://www.bkjia.com/Androidjc/869179.html
+        if (resultCode == 005){
+            schedules.clear();
+            schedules.addAll(dbUtil.getAllSchedules());
+            adapter.notifyDataSetChanged();
+        }
     }
 }
