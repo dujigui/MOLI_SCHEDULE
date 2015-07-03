@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-public class ScheduleFragment extends Fragment implements View.OnClickListener {
+public class ScheduleFragment extends Fragment implements View.OnClickListener,ScheduleClickListener {
     private RecyclerView mRecyclerView;
     private ScheduleAdapter adapter;
     private FloatingActionButton mFab;
@@ -36,13 +36,12 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
 
-        adapter = new ScheduleAdapter(getActivity(),schedules);
+        adapter = new ScheduleAdapter(getActivity(),schedules,this);
         mRecyclerView.setAdapter(adapter);
 
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),LinearLayoutManager.VERTICAL));
 
-        mRecyclerView.setOnClickListener(this);
 
         return view;
     }
@@ -57,11 +56,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 //启动创建Schedule的Activity
                 Intent intent = new Intent(getActivity(),CreateSchedule.class);
                 startActivityForResult(intent, 004);
-
-                break;
-            case R.id.rv_schedule:
-
-                new TestMessage(getActivity(),"haha");
 
                 break;
         }
@@ -80,5 +74,10 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
             schedules.addAll(dbUtil.getAllSchedules());
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onScheduleClick(View view, int position) {
+        new TestMessage(getActivity(),"您点击了在第"+position+"的"+schedules.get(position).getDetail());
     }
 }

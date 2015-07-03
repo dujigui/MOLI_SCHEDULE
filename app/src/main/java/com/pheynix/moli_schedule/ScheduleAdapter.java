@@ -17,10 +17,12 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
     private Context mContext;
     private ArrayList<Schedule> schedules = new ArrayList<>();
     private Schedule currentSchedule;
+    private ScheduleClickListener mListener;
 
-    public ScheduleAdapter(Context mContext, ArrayList<Schedule> schedules) {
+    public ScheduleAdapter(Context mContext, ArrayList<Schedule> schedules,ScheduleClickListener listener) {
         this.mContext = mContext;
         this.schedules = schedules;
+        mListener = listener;
     }
 
     @Override
@@ -47,13 +49,20 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         return schedules.size();
     }
 
-    class ScheduleViewHolder extends RecyclerView.ViewHolder {
+
+
+
+    //>>>>>>>>>>>>>>>>>>>>ViewHolder在此<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+    class ScheduleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView iv_urgency;
         TextView tv_schedule_detail, tv_time_start, tv_time_last;
 
 
         public ScheduleViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             iv_urgency = (ImageView) itemView.findViewById(R.id.iv_urgency);
             tv_schedule_detail = (TextView) itemView.findViewById(R.id.tv_schedule_detail);
@@ -61,7 +70,17 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
             tv_time_last = (TextView) itemView.findViewById(R.id.tv_time_last);
 
         }
+
+        @Override
+        public void onClick(View v) {
+            mListener.onScheduleClick(v,getPosition());
+        }
     }
+
+
+    //>>>>>>>>>>>>>>>>>>>>ViewHolder在此<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
 
     private int getUrgencyImage() {
 
