@@ -19,9 +19,11 @@
 
     <string-array name="tabs_titles">
         <item>日程</item>
-        <item>记录</item>
         <item>总结</item>
     </string-array>
+
+    <!--在tab中删除记录页-->
+    <!--<item>记录</item>-->
 
     <string-array name="week">
         <item>星期天</item>

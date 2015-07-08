@@ -23,10 +23,11 @@ public class MainContentPageAdapter extends FragmentPagerAdapter {
         if (position == 0){
             fragment = new ScheduleFragment();
         }
+//        在tab中删除记录页
+//        if (position == 1){
+//            fragment = new RecordFragment();
+//        }
         if (position == 1){
-            fragment = new RecordFragment();
-        }
-        if (position == 2){
             fragment = new SummarySchedule();
         }
 
@@ -35,8 +36,8 @@ public class MainContentPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
-    }
+        return 2;
+    }//在tab中删除记录页
 
     @Override
     public CharSequence getPageTitle(int position) {

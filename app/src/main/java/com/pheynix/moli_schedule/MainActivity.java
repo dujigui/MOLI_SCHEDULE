@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -44,6 +45,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_daily:
+                new TestMessage(this,"daily");
+                break;
+            case R.id.action_weekly:
+                new TestMessage(this,"weekly");
+                break;
+            case R.id.action_monthly:
+                new TestMessage(this,"monthly");
+                break;
+        }
+
+        return true;
+    }
 
     private void initView() {
         //设置新的Toolbar
@@ -58,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
 
         tabs.addTab(tabs.newTab());
         tabs.addTab(tabs.newTab());
-        tabs.addTab(tabs.newTab());
+//        在tab中删除记录页
+//        tabs.addTab(tabs.newTab());
 
         mPageAdapter = new MainContentPageAdapter(getSupportFragmentManager(),this);
 
         mViewPager.setAdapter(mPageAdapter);
         tabs.setupWithViewPager(mViewPager);
-
 
     }
 

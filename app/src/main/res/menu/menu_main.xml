@@ -1,10 +1,20 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.pheynix.moli_schedule.MainActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_daily"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="日度总结" />
+
+    <item
+        android:id="@+id/action_weekly"
+        android:orderInCategory="200"
+        android:title="周度总结"
+        />
+
+    <item
+        android:id="@+id/action_monthly"
+        android:orderInCategory="300"
+        android:title="月度总结"/>
+
 </menu>

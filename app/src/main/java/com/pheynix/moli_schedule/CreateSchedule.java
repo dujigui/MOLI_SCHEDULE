@@ -56,6 +56,17 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     public static final int RESULT_CODE_ALTER_SCHEDULE = 010;
     public static final int RESULT_CODE_DELETE_SCHEDULE = 011;
 
+
+
+    //应重新设计排版此Activity的布局，参考http://www.jcodecraeer.com/a/opensource/2015/0125/2358.html
+    //应重新设计排版此Activity的布局，参考http://www.jcodecraeer.com/a/opensource/2015/0125/2358.html
+    //应重新设计排版此Activity的布局，参考http://www.jcodecraeer.com/a/opensource/2015/0125/2358.html
+    //应重新设计排版此Activity的布局，参考http://www.jcodecraeer.com/a/opensource/2015/0125/2358.html
+    //应重新设计排版此Activity的布局，参考http://www.jcodecraeer.com/a/opensource/2015/0125/2358.html
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
