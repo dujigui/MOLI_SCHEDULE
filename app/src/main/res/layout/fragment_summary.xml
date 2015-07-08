@@ -1,13 +1,8 @@
 <RelativeLayout
+    android:id="@+id/container_fragment_summary"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="#75dddd"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <TextView
-        android:text="Summary"
-        android:gravity="center"
-        android:background="#75dddd"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </RelativeLayout>

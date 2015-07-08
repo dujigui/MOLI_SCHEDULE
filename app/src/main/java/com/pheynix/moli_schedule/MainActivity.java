@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private MainContentPageAdapter mPageAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private DBUtil dbUtil;
+    private FragmentManager fragmentManager;
 
 
     @Override
@@ -56,13 +59,31 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.action_daily:
-                new TestMessage(this,"daily");
+
+                if (fragmentManager.findFragmentByTag("SummaryDailyFragment") == null){
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.add(R.id.container_fragment_summary,new SummaryDailyFragment(),"SummaryDailyFragment");
+                    transaction.commit();
+                }
+
                 break;
             case R.id.action_weekly:
-                new TestMessage(this,"weekly");
+
+                if (fragmentManager.findFragmentByTag("SummaryWeeklyFragment") == null){
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.add(R.id.container_fragment_summary,new SummaryWeeklyFragment(),"SummaryWeeklyFragment");
+                    transaction.commit();
+                }
+
                 break;
             case R.id.action_monthly:
-                new TestMessage(this,"monthly");
+
+                if (fragmentManager.findFragmentByTag("SummaryMonthlyFragment") == null){
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.add(R.id.container_fragment_summary,new SummaryMonthlyFragment(),"SummaryMonthlyFragment");
+                    transaction.commit();
+                }
+
                 break;
         }
 
@@ -89,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.setAdapter(mPageAdapter);
         tabs.setupWithViewPager(mViewPager);
+
+        fragmentManager = getSupportFragmentManager();
 
     }
 
