@@ -8,6 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -37,16 +39,22 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     private EditText et_schedule_detail;
     private ArrayAdapter<String> spinnerAdapter;
     private ArrayList<String> category;
+    private Schedule oldSchedule = null;
     private Schedule newSchedule;
     private Slider slider_volume;
     private SwitchCompat switch_vibration;
+    private Intent intent_schedule_fragment;
 
     private static final String PRE_CREATE_SCHEDULE = "create_schedule";
     private static final String VOLUME = "volume";
     private static final String VIBRATION = "vibration";
-    private StringBuffer dataBuffer;
+    private StringBuffer dateBuffer;
     private StringBuffer timeBuffer;
     private DBUtil dbUtil;
+
+    public static final int RESULT_CODE_CREATE_SCHEDULE = 005;
+    public static final int RESULT_CODE_ALTER_SCHEDULE = 010;
+    public static final int RESULT_CODE_DELETE_SCHEDULE = 011;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,98 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
         //初始化应该尽量在所有操作前
         initView();
 
+        intent_schedule_fragment = getIntent();
+
+        try {
+            oldSchedule = (Schedule) intent_schedule_fragment.getExtras().getSerializable(ScheduleFragment.SCHEDULE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (oldSchedule != null) {
+            spinner_category.setSelection(getSpinnerPosition());
+            et_schedule_detail.setText(oldSchedule.getDetail());
+            et_schedule_detail.setSelection(oldSchedule.getDetail().length());
+            tv_time_start.setText(getDisplayDate());
+            tv_time_last.setText(getDisplayTime());
+            setUpUrgency();
+            slider_volume.setValue((float) oldSchedule.getVolume(),false);
+            switch_vibration.setChecked(oldSchedule.isVibration());
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_create_schedule, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.delete_schedule) {
+            if (oldSchedule != null){
+                dbUtil.deleteSchedule(oldSchedule.getId());
+
+                Intent intent = new Intent();
+                intent.putExtra("isDeleted",true);
+                setResult(RESULT_CODE_DELETE_SCHEDULE,intent);
+                Toast.makeText(this,"成功删除！",Toast.LENGTH_SHORT).show();
+
+                finish();
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    private void setUpUrgency(){
+        hideTextView();
+        switch (oldSchedule.getUrgency()){
+            case 1:
+                tv_quadrant_1_1.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                tv_quadrant_1_0.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                tv_quadrant_0_1.setVisibility(View.VISIBLE);
+                break;
+            case 4:
+                tv_quadrant_0_0.setVisibility(View.VISIBLE);
+                break;
+            default:
+                tv_quadrant_1_1.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private String getDisplayTime(){
+        String[] time = oldSchedule.getTime_last().split(" ");
+        timeBuffer = new StringBuffer();
+        timeBuffer.append(time[0]+" "+time[1]);
+        return time[0]+"时"+time[1]+"分";
+    }
+
+    private String getDisplayDate(){
+        String[] date = oldSchedule.getTime_start().split(" ");
+        dateBuffer = new StringBuffer();
+        dateBuffer.append(date[0] + " " + date[1] + " " + date[2] + " " + date[3] + " " + date[4]);
+        return date[0]+"年"+date[1]+"月"+date[2]+"日"+date[3]+"时"+date[4]+"分";
+    }
+
+    private int getSpinnerPosition() {
+        int i;
+        for (i = 0; i<category.size() ; i++){
+            //String与String之间的比较应该用String.equals，不能用“==”
+            if (oldSchedule.getCategory().equals(category.get(i))){
+                return i;
+            }
+        }
+        return i;
     }
 
 
@@ -165,7 +265,7 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int i, int i1, int i2) {
         date = i+"年"+i1+"月"+i2+"日";
-        dataBuffer = new StringBuffer(i+" "+i1+" "+i2 +" ");
+        dateBuffer = new StringBuffer(i+" "+i1+" "+i2 +" ");
 
         showTimePickerDialog();
 
@@ -176,7 +276,7 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int i, int i1) {
         time = i+"时"+i1+"分";
         tv_time_start.setText(date+time);
-        dataBuffer.append(i+" "+i1);
+        dateBuffer.append(i + " " + i1);
     }
 
     //点击重要紧急度按钮的响应动作之前，把所有文字隐藏
@@ -217,23 +317,37 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
 
                 newSchedule.setCategory(category.get(spinner_category.getSelectedItemPosition()));
                 newSchedule.setDetail(et_schedule_detail.getText().toString());
-                newSchedule.setTime_start(dataBuffer.toString());
+                newSchedule.setTime_start(dateBuffer.toString());
                 newSchedule.setTime_last(timeBuffer.toString());
                 newSchedule.setUrgency(getUrgency());
                 newSchedule.setVibration(switch_vibration.isChecked());
                 newSchedule.setVolume(slider_volume.getValue());
-                dbUtil.addSchedule(newSchedule);
+
+
+                if (oldSchedule != null){
+
+                    newSchedule.setStatus(oldSchedule.getStatus());
+                    newSchedule.setId(oldSchedule.getId());
+                    dbUtil.alterSchedule(newSchedule);
+
+                    Intent intent = new Intent();
+                    intent.putExtra("isAltered",true);
+                    setResult(RESULT_CODE_ALTER_SCHEDULE,intent);
+                    Toast.makeText(this,"日程已修改！",Toast.LENGTH_SHORT).show();
+                }else {
+
+                    newSchedule.setStatus(1);//创建日程默认状态为“未完成”
+                    dbUtil.addSchedule(newSchedule);
+
+                    Intent intent = new Intent();
+                    intent.putExtra("isCreated",true);
+                    setResult(RESULT_CODE_CREATE_SCHEDULE,intent);
+                    Toast.makeText(this,"日程创建成功！",Toast.LENGTH_SHORT).show();
+                }
 
                 SharedPreferences sharedPreferences = getSharedPreferences(PRE_CREATE_SCHEDULE,Context.MODE_PRIVATE);
                 sharedPreferences.edit().putInt(VOLUME,slider_volume.getValue()).commit();
                 sharedPreferences.edit().putBoolean(VIBRATION,switch_vibration.isChecked()).commit();
-
-                Toast.makeText(this,"日程创建成功！",Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent();
-                intent.putExtra("isCreated",true);
-                setResult(005,intent);
-
                 finish();
 
                 break;

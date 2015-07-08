@@ -18,14 +18,14 @@ public class DBUtil {
     private SQLiteDatabase db;
 
     //构造函数
-    public DBUtil(Context context,String databaseName,SQLiteDatabase.CursorFactory factory,int databaseVersion) {
-        openHelper = new DatabaseOpenHelper(context,databaseName,factory,databaseVersion);
+    public DBUtil(Context context, String databaseName, SQLiteDatabase.CursorFactory factory, int databaseVersion) {
+        openHelper = new DatabaseOpenHelper(context, databaseName, factory, databaseVersion);
         db = openHelper.getWritableDatabase();
     }
 
     //构造函数
-    public DBUtil(Context context,int databaseVersion) {
-        openHelper = new DatabaseOpenHelper(context,databaseVersion);
+    public DBUtil(Context context, int databaseVersion) {
+        openHelper = new DatabaseOpenHelper(context, databaseVersion);
         db = openHelper.getWritableDatabase();
     }
 
@@ -36,18 +36,20 @@ public class DBUtil {
     }
 
 
-    public void insertData(Schedule schedule){
-        ContentValues values = new ContentValues();
-        db.insert(DatabaseOpenHelper.TABLE_NAME_SCHEDULE,null,values);
+//    public void insertData(Schedule schedule){
+//        ContentValues values = new ContentValues();
+//        db.insert(DatabaseOpenHelper.TABLE_NAME_SCHEDULE,null,values);
+//
+//        return ;
+//    }
 
-        return ;
-    }
 
-    public ArrayList<String> getAllCategoryName(){
-        Cursor cursor = db.query(openHelper.TABLE_NAME_CATEGORY, new String[]{ openHelper.CATEGORY_NAME}, null, null, null, null, null);
+    //获取所有日程类名称
+    public ArrayList<String> getAllCategoryName() {
+        Cursor cursor = db.query(openHelper.TABLE_NAME_CATEGORY, new String[]{openHelper.CATEGORY_NAME}, null, null, null, null, null);
         ArrayList<String> list = new ArrayList<>();
 
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             String s = cursor.getString(cursor.getColumnIndex(openHelper.CATEGORY_NAME));
             list.add(s);
         }
@@ -55,39 +57,99 @@ public class DBUtil {
         return list;
     }
 
-    public void addCategory(Category category){
-        ContentValues values = new ContentValues();
-        values.put(openHelper.CATEGORY_NAME,category.getCategory_name());
-        values.put(openHelper.TIME_TARGET,category.getTime_target());
-        values.put(openHelper.TIME_SUMMARY,category.getTime_summary());
-        values.put(openHelper.PERIODICITY,category.getPeriodicity());
-        values.put(openHelper.TIME_CYCLE,category.getTime_cycle());
+    public boolean deleteSchedule(int _id){
+        int i = db.delete(openHelper.TABLE_NAME_SCHEDULE,"_id = ?",new String[]{_id+""});
+        return true;
+    }
 
-        db.insert(openHelper.TABLE_NAME_CATEGORY,null,values);
+    //应该和changeScheduleStatus合并
+    //传入的schedule必须包含“_id”，使用"_id"定位数据库中的日程项
+    public void alterSchedule(Schedule schedule){
+
+        int id = schedule.getId();
+
+        ContentValues values = new ContentValues();
+        values.put(openHelper.CATEGORY, schedule.getCategory());
+        values.put(openHelper.DETAIL, schedule.getDetail());
+        values.put(openHelper.TIME_START, schedule.getTime_start());
+        values.put(openHelper.TIME_LAST, schedule.getTime_last());
+        values.put(openHelper.URGENCY, schedule.getUrgency());
+        values.put(openHelper.VIBRATION, schedule.isVibration());
+        values.put(openHelper.VOLUME, schedule.getVolume());
+        values.put(openHelper.STATUS, schedule.getStatus());
+
+        db.update(openHelper.TABLE_NAME_SCHEDULE, values, openHelper.UID + " = ?", new String[]{id + ""});
+    }
+
+    //操作日程的状态
+    public void changeScheduleStatus(int id, int flag) {
+        switch (flag) {
+            case 1://改为为未完成
+                doChange(id, flag);
+                break;
+            case 2://改为已延期，暂时不添加此状态
+
+                break;
+            case 3://改为已完成
+                doChange(id, flag);
+                break;
+        }
+    }
+
+    //changeScheduleStatus提取出来的方法，执行修改操作
+    private void doChange(int id, int flag) {
+        ContentValues values = new ContentValues();
+        values.put(openHelper.STATUS, flag);
+        db.update(openHelper.TABLE_NAME_SCHEDULE, values, openHelper.UID + " = ?", new String[]{id + ""});
+    }
+
+
+    //增加日程类
+    public void addCategory(Category category) {
+        ContentValues values = new ContentValues();
+        values.put(openHelper.CATEGORY_NAME, category.getCategory_name());
+        values.put(openHelper.TIME_TARGET, category.getTime_target());
+        values.put(openHelper.TIME_SUMMARY, category.getTime_summary());
+        values.put(openHelper.PERIODICITY, category.getPeriodicity());
+        values.put(openHelper.TIME_CYCLE, category.getTime_cycle());
+
+        db.insert(openHelper.TABLE_NAME_CATEGORY, null, values);
 
     }
 
-    public  void addSchedule(Schedule schedule){
+    //增加日程
+    public void addSchedule(Schedule schedule) {
         ContentValues values = new ContentValues();
-        values.put(openHelper.CATEGORY,schedule.getCategory());
-        values.put(openHelper.DETAIL,schedule.getDetail());
-        values.put(openHelper.TIME_START,schedule.getTime_start());
-        values.put(openHelper.TIME_LAST,schedule.getTime_last());
-        values.put(openHelper.URGENCY,schedule.getUrgency());
-        values.put(openHelper.VIBRATION,schedule.isVibration());
-        values.put(openHelper.VOLUME,schedule.getVolume());
+        values.put(openHelper.CATEGORY, schedule.getCategory());
+        values.put(openHelper.DETAIL, schedule.getDetail());
+        values.put(openHelper.TIME_START, schedule.getTime_start());
+        values.put(openHelper.TIME_LAST, schedule.getTime_last());
+        values.put(openHelper.URGENCY, schedule.getUrgency());
+        values.put(openHelper.VIBRATION, schedule.isVibration());
+        values.put(openHelper.VOLUME, schedule.getVolume());
+        values.put(openHelper.STATUS, schedule.getStatus());//创建时状态为“未完成”
 
-        db.insert(openHelper.TABLE_NAME_SCHEDULE,null,values);
+        db.insert(openHelper.TABLE_NAME_SCHEDULE, null, values);
     }
 
-    public ArrayList<Schedule> getAllSchedules(){
+    //检索所有的日程，应该改为检索昨天、今天、明天的日程；
+    public ArrayList<Schedule> getAllSchedules() {
         ArrayList<Schedule> schedules = new ArrayList<>();
+
+        //可以null表示选择所有列
+//        Cursor cursor = db.query(openHelper.TABLE_NAME_SCHEDULE,
+//                new String[]{openHelper.UID, openHelper.CATEGORY, openHelper.DETAIL, openHelper.TIME_START
+//                        , openHelper.TIME_LAST, openHelper.URGENCY, openHelper.VIBRATION, openHelper.VOLUME,openHelper.STATUS},
+//                null, null, null, null, null);
+
         Cursor cursor = db.query(openHelper.TABLE_NAME_SCHEDULE,
-                new String[]{openHelper.CATEGORY,openHelper.DETAIL,openHelper.TIME_START
-                        ,openHelper.TIME_LAST,openHelper.URGENCY,openHelper.VIBRATION,openHelper.VOLUME},
-                null,null,null,null,null);
-        while (cursor.moveToNext()){
+                new String[]{openHelper.UID, openHelper.CATEGORY, openHelper.DETAIL, openHelper.TIME_START
+                        , openHelper.TIME_LAST, openHelper.URGENCY, openHelper.VIBRATION, openHelper.VOLUME,openHelper.STATUS},
+                null, null, null, null, openHelper.STATUS+" ASC, "+openHelper.TIME_START+" ASC ");
+
+        while (cursor.moveToNext()) {
             Schedule schedule = new Schedule();
+            schedule.setId(cursor.getInt(cursor.getColumnIndex(openHelper.UID)));
             schedule.setCategory(cursor.getString(cursor.getColumnIndex(openHelper.CATEGORY)));
             schedule.setDetail(cursor.getString(cursor.getColumnIndex(openHelper.DETAIL)));
             schedule.setTime_start(cursor.getString(cursor.getColumnIndex(openHelper.TIME_START)));
@@ -95,15 +157,17 @@ public class DBUtil {
             schedule.setUrgency(cursor.getInt(cursor.getColumnIndex(openHelper.URGENCY)));
             schedule.setVibration(getVibration(cursor));//数据库保存值为1或0，有时间测试Boolean.parse是否有效
             schedule.setVolume(cursor.getInt(cursor.getColumnIndex(openHelper.VOLUME)));
+            schedule.setStatus(cursor.getInt(cursor.getColumnIndex(openHelper.STATUS)));
             schedules.add(schedule);
         }
 
         return schedules;
     }
 
+    //从数据库的数据获取震动提示的状态
     private boolean getVibration(Cursor cursor) {
 
-        switch (cursor.getInt(cursor.getColumnIndex(openHelper.VIBRATION))){
+        switch (cursor.getInt(cursor.getColumnIndex(openHelper.VIBRATION))) {
             case 1:
                 return true;
             case 0:
@@ -113,7 +177,7 @@ public class DBUtil {
         }
     }
 
-
+    //建立数据库
     class DatabaseOpenHelper extends SQLiteOpenHelper {
         private static final int DATABASE_VERSION = 1;
         private static final String DATABASE_NAME = "moli.db";
@@ -127,15 +191,19 @@ public class DBUtil {
         private static final String URGENCY = "urgency";
         private static final String VIBRATION = "vibration";
         private static final String VOLUME = "volume";
-        private static final String CREATE_TABLE_SCHEDULE = "CREATE TABLE "+ TABLE_NAME_SCHEDULE+ " ("
+
+        private static final String STATUS = "status";//增加表示日程状态的列，状态为“未完成”“已推迟”“已完成”
+
+        private static final String CREATE_TABLE_SCHEDULE = "CREATE TABLE " + TABLE_NAME_SCHEDULE + " ("
                 + UID + " INTEGER PRIMARY KEY AUTOINCREMENT, "//主键
                 + CATEGORY + " TEXT, "//日程类别
                 + DETAIL + " TEXT, "//日程详细信息
-                + TIME_START + " INTEGER, "//日程开始时间
-                + TIME_LAST + " INTEGER, "//日程持续时间
+                + TIME_START + " TEXT, "//日程开始时间
+                + TIME_LAST + " TEXT, "//日程持续时间
                 + URGENCY + " INTEGER, "//日程重要紧急度，为1234
                 + VIBRATION + " INTEGER, "//是否震动提示
-                + VOLUME + " INTEGER)";//提示音大小1~00;
+                + VOLUME + " INTEGER, "//提示音大小1~00;
+                + STATUS + " INTEGER)";//123
 
 
         private static final String TABLE_NAME_CATEGORY = "category";
@@ -147,7 +215,7 @@ public class DBUtil {
 
         //db.execSQL("CREATE TABLE person (_id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, age SMALLINT)");
 //        private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE "+ TABLE_NAME_CATEGORY+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " + CATEGORY_NAME + " TEXT, " + TIME_TARGET + " TEXT, " + TIME_SUMMARY + " TEXT, " + PERIODICITY + " TEXT, " + TIME_CYCLE + " TEXT)";
-        private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE "+ TABLE_NAME_CATEGORY
+        private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE " + TABLE_NAME_CATEGORY
                 + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + CATEGORY_NAME + " TEXT, "
                 + TIME_TARGET + " TEXT, "
@@ -175,8 +243,6 @@ public class DBUtil {
             try {
                 db.execSQL(CREATE_TABLE_SCHEDULE);
                 db.execSQL(CREATE_TABLE_CATEGORY);
-//                initCategory();
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -186,15 +252,14 @@ public class DBUtil {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             try {
-                db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME_SCHEDULE);
-                db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME_CATEGORY);
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_SCHEDULE);
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_CATEGORY);
                 onCreate(db);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
-
 
 
 }

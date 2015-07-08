@@ -15,6 +15,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 public class ScheduleFragment extends Fragment implements View.OnClickListener,ScheduleClickListener {
+    public static final int REQUEST_CODE_ALTER_SCHEDULE = 007;
+    public static final int REQUEST_CODE_CREATE_SCHEDULE = 004;
+    public static final String SCHEDULE = "schedule_need_to_be_modify";
+
     private RecyclerView mRecyclerView;
     private ScheduleAdapter adapter;
     private FloatingActionButton mFab;
@@ -55,29 +59,70 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
 
                 //启动创建Schedule的Activity
                 Intent intent = new Intent(getActivity(),CreateSchedule.class);
-                startActivityForResult(intent, 004);
+                startActivityForResult(intent, REQUEST_CODE_CREATE_SCHEDULE);
 
                 break;
         }
-
-
     }
 
+    //创建日程后返回主页面，更新数据
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //日程创建后，更新schedules的数据，不能简单地更改schedules的指向，必须清空schedules并重新添加数据
-        //详细原因在http://www.bkjia.com/Androidjc/869179.html
-        if (resultCode == 005){
-            schedules.clear();
-            schedules.addAll(dbUtil.getAllSchedules());
-            adapter.notifyDataSetChanged();
+        if (resultCode == CreateSchedule.RESULT_CODE_CREATE_SCHEDULE){
+            updateSchedules();
+        }
+        if (resultCode == CreateSchedule.RESULT_CODE_ALTER_SCHEDULE){
+            updateSchedules();
+        }
+        if (resultCode == CreateSchedule.RESULT_CODE_DELETE_SCHEDULE){
+            updateSchedules();
         }
     }
 
+    //日程项点击时的回调函数
     @Override
     public void onScheduleClick(View view, int position) {
-        new TestMessage(getActivity(),"您点击了在第"+position+"的"+schedules.get(position).getDetail());
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(SCHEDULE,schedules.get(position));
+        Intent intent = new Intent(getActivity(),CreateSchedule.class);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, REQUEST_CODE_ALTER_SCHEDULE);
+
+    }
+
+    //紧急度点击时的回调函数（紧急度点击时会把日程状态改变为“已完成”）
+    @Override
+    public void onUrgencyClick(View view, int position) {
+
+        Schedule schedule = schedules.get(position);
+        switch (schedule.getStatus()){
+            case 1:
+                dbUtil.changeScheduleStatus(schedule.getId(),3);
+                break;
+            case 2:
+
+                break;
+
+            case 3:
+                dbUtil.changeScheduleStatus(schedule.getId(),1);
+                break;
+            default:
+                break;
+        }
+        updateSchedules();
+    }
+
+
+    //重新装载RecyclerView的数据
+    //日程创建后，更新schedules的数据，不能简单地更改schedules的指向，必须清空schedules并重新添加数据
+    //详细原因在http://www.bkjia.com/Androidjc/869179.html
+    //更改为public
+    public void updateSchedules(){
+        schedules.clear();
+        schedules.addAll(dbUtil.getAllSchedules());
+        adapter.notifyDataSetChanged();
     }
 }

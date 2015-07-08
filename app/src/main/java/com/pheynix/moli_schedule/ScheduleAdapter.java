@@ -62,18 +62,28 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
 
         public ScheduleViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
 
             iv_urgency = (ImageView) itemView.findViewById(R.id.iv_urgency);
             tv_schedule_detail = (TextView) itemView.findViewById(R.id.tv_schedule_detail);
             tv_time_start = (TextView) itemView.findViewById(R.id.tv_time_start);
             tv_time_last = (TextView) itemView.findViewById(R.id.tv_time_last);
 
+            iv_urgency.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            mListener.onScheduleClick(v,getPosition());
+
+            switch (v.getId()){
+                case R.id.iv_urgency:
+                    mListener.onUrgencyClick(v,getPosition());
+                    break;
+                default:
+                    mListener.onScheduleClick(v,getPosition());
+                    break;
+            }
+
         }
     }
 
@@ -84,18 +94,39 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
 
     private int getUrgencyImage() {
 
-        switch (currentSchedule.getUrgency()) {
+        switch (currentSchedule.getStatus()){
             case 1:
-                return R.drawable.ic_ring_1_1;
+                switch (currentSchedule.getUrgency()) {
+                    case 1:
+                        return R.drawable.ic_ring_1_1;
+                    case 2:
+                        return R.drawable.ic_ring_1_0;
+                    case 3:
+                        return R.drawable.ic_ring_0_1;
+                    case 4:
+                        return R.drawable.ic_ring_0_0;
+                    default:
+                        return R.drawable.ic_ring_1_1;
+                }
             case 2:
-                return R.drawable.ic_ring_1_0;
+                break;
             case 3:
-                return R.drawable.ic_ring_0_1;
-            case 4:
-                return R.drawable.ic_ring_0_0;
+                switch (currentSchedule.getUrgency()){
+                    case 1:
+                        return R.drawable.ic_done_1_1;
+                    case 2:
+                        return R.drawable.ic_done_1_0;
+                    case 3:
+                        return R.drawable.ic_done_0_1;
+                    case 4:
+                        return R.drawable.ic_done_0_0;
+                    default:
+                        return R.drawable.ic_done_1_1;
+                }
             default:
                 return R.drawable.ic_ring_1_1;
         }
+        return R.drawable.ic_ring_1_1;
     }
 
     private String getTimeStart() {
