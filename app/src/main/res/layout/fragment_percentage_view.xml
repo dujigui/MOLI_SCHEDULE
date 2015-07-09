@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.pheynix.moli_schedule.PercentageView.PercentageView">
+
+    <ImageView
+        android:id="@+id/percentage_view_bg"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/percentage_view_bg" />
+
+    <ImageView
+        android:id="@+id/percentage_view_front"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:background="@drawable/percentage_view_front" />
+
+    <TextView
+        android:id="@+id/percentage_view_percentage"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/percentage_view_bg"
+        android:layout_alignBottom="@id/percentage_view_bg"
+        android:gravity="center"
+        android:text="百分比"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
