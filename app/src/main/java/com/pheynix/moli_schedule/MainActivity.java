@@ -177,10 +177,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initCategory() {
-        Category category_normal = new Category("普通日程","-1","-1","-1","-1");
+        Category category_normal = new Category("普通日程",0,0,"-1",0);
         dbUtil.addCategory(category_normal);
 
-        Category category_new = new Category("新建日程","-1","-1","-1","-1");
+        Category category_new = new Category("新建日程",0,0,"-1",0);
         dbUtil.addCategory(category_new);
     }
 

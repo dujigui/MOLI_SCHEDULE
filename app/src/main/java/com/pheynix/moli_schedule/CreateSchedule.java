@@ -48,8 +48,12 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     private static final String PRE_CREATE_SCHEDULE = "create_schedule";
     private static final String VOLUME = "volume";
     private static final String VIBRATION = "vibration";
-    private StringBuffer dateBuffer;
-    private StringBuffer timeBuffer;
+
+//    private StringBuffer dateBuffer;
+//    private StringBuffer timeBuffer;
+    private Calendar calendar_time_start;
+    private Calendar calendar_time_last;
+
     private DBUtil dbUtil;
 
     public static final int RESULT_CODE_CREATE_SCHEDULE = 005;
@@ -89,8 +93,12 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
             spinner_category.setSelection(getSpinnerPosition());
             et_schedule_detail.setText(oldSchedule.getDetail());
             et_schedule_detail.setSelection(oldSchedule.getDetail().length());
-            tv_time_start.setText(getDisplayDate());
-            tv_time_last.setText(getDisplayTime());
+
+//            tv_time_start.setText(getDisplayDate());
+//            tv_time_last.setText(getDisplayTime());
+            tv_time_start.setText(DateTimeUtils.longToDate(oldSchedule.getTime_start()));
+            tv_time_last.setText(DateTimeUtils.longToTime(oldSchedule.getTime_last()));
+
             setUpUrgency();
             slider_volume.setValue((float) oldSchedule.getVolume(),false);
             switch_vibration.setChecked(oldSchedule.isVibration());
@@ -146,19 +154,21 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
         }
     }
 
-    private String getDisplayTime(){
-        String[] time = oldSchedule.getTime_last().split(" ");
-        timeBuffer = new StringBuffer();
-        timeBuffer.append(time[0]+" "+time[1]);
-        return time[0]+"时"+time[1]+"分";
-    }
-
-    private String getDisplayDate(){
-        String[] date = oldSchedule.getTime_start().split(" ");
-        dateBuffer = new StringBuffer();
-        dateBuffer.append(date[0] + " " + date[1] + " " + date[2] + " " + date[3] + " " + date[4]);
-        return date[0]+"年"+date[1]+"月"+date[2]+"日"+date[3]+"时"+date[4]+"分";
-    }
+//    private String getDisplayTime(){
+//        String[] time = oldSchedule.getTime_last().split(" ");
+//        timeBuffer = new StringBuffer();
+//        timeBuffer.append(time[0]+" "+time[1]);
+//        return time[0]+"时"+time[1]+"分";
+//
+//
+//    }
+//
+//    private String getDisplayDate(){
+//        String[] date = oldSchedule.getTime_start().split(" ");
+//        dateBuffer = new StringBuffer();
+//        dateBuffer.append(date[0] + " " + date[1] + " " + date[2] + " " + date[3] + " " + date[4]);
+//        return date[0]+"年"+date[1]+"月"+date[2]+"日"+date[3]+"时"+date[4]+"分";
+//    }
 
     private int getSpinnerPosition() {
         int i;
@@ -207,6 +217,13 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
         ic_quadrant_0_1.setOnClickListener(this);
         ic_quadrant_0_0.setOnClickListener(this);
 
+        calendar_time_last = Calendar.getInstance();
+        calendar_time_start = Calendar.getInstance();
+        calendar_time_last.clear();
+        calendar_time_start.clear();
+//        Log.e("pheynix",calendar_time_start.getTimeInMillis()+"");
+//        Log.e("pheynix",calendar_time_last.getTimeInMillis()+"");
+
         tv_time_start = (TextView) findViewById(R.id.id_time_start);
         tv_time_last = (TextView) findViewById(R.id.id_time_last);
         tv_time_start.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +245,8 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
                         } else {
                             tv_time_last.setText(i + "时" + i1 + "分");
                         }
-                        timeBuffer = new StringBuffer(i+" "+i1);
+                        calendar_time_last.set(Calendar.HOUR_OF_DAY, i);
+                        calendar_time_last.set(Calendar.MINUTE, i1);
 
                     }
                 }, 0, 0, true);
@@ -275,8 +293,12 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     //响应开始时间－选择日期Dialog
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int i, int i1, int i2) {
-        date = i+"年"+i1+"月"+i2+"日";
-        dateBuffer = new StringBuffer(i+" "+i1+" "+i2 +" ");
+        date = i+"年"+(i1+1)+"月"+i2+"日";
+//        dateBuffer = new StringBuffer(i+" "+i1+" "+i2 +" ");
+        calendar_time_start.set(Calendar.YEAR,i);
+        calendar_time_start.set(Calendar.MONTH,i1);//Calendar中的month是0基的（0 == 1月），正好这个Dialog出来的i1也是0基的..........表示非常无语
+        calendar_time_start.set(Calendar.DAY_OF_MONTH,i2);
+
 
         showTimePickerDialog();
 
@@ -287,7 +309,11 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int i, int i1) {
         time = i+"时"+i1+"分";
         tv_time_start.setText(date+time);
-        dateBuffer.append(i + " " + i1);
+
+//        dateBuffer.append(i + " " + i1);
+        calendar_time_start.set(Calendar.HOUR_OF_DAY,i);
+        calendar_time_start.set(Calendar.MINUTE,i1);
+
     }
 
     //点击重要紧急度按钮的响应动作之前，把所有文字隐藏
@@ -328,8 +354,12 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
 
                 newSchedule.setCategory(category.get(spinner_category.getSelectedItemPosition()));
                 newSchedule.setDetail(et_schedule_detail.getText().toString());
-                newSchedule.setTime_start(dateBuffer.toString());
-                newSchedule.setTime_last(timeBuffer.toString());
+
+//                newSchedule.setTime_start(dateBuffer.toString());
+//                newSchedule.setTime_last(timeBuffer.toString());
+                newSchedule.setTime_start(calendar_time_start.getTimeInMillis());
+                newSchedule.setTime_last(calendar_time_last.getTimeInMillis());
+
                 newSchedule.setUrgency(getUrgency());
                 newSchedule.setVibration(switch_vibration.isChecked());
                 newSchedule.setVolume(slider_volume.getValue());

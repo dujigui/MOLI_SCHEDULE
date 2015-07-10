@@ -58,8 +58,8 @@ public class DBUtil {
     }
 
     public boolean deleteSchedule(int _id){
-        int i = db.delete(openHelper.TABLE_NAME_SCHEDULE,"_id = ?",new String[]{_id+""});
-        return true;
+        long isSucceed = db.delete(openHelper.TABLE_NAME_SCHEDULE,"_id = ?",new String[]{_id+""});
+        return isSucceed != -1;
     }
 
     //应该和changeScheduleStatus合并
@@ -152,8 +152,8 @@ public class DBUtil {
             schedule.setId(cursor.getInt(cursor.getColumnIndex(openHelper.UID)));
             schedule.setCategory(cursor.getString(cursor.getColumnIndex(openHelper.CATEGORY)));
             schedule.setDetail(cursor.getString(cursor.getColumnIndex(openHelper.DETAIL)));
-            schedule.setTime_start(cursor.getString(cursor.getColumnIndex(openHelper.TIME_START)));
-            schedule.setTime_last(cursor.getString(cursor.getColumnIndex(openHelper.TIME_LAST)));
+            schedule.setTime_start(cursor.getLong(cursor.getColumnIndex(openHelper.TIME_START)));
+            schedule.setTime_last(cursor.getLong(cursor.getColumnIndex(openHelper.TIME_LAST)));
             schedule.setUrgency(cursor.getInt(cursor.getColumnIndex(openHelper.URGENCY)));
             schedule.setVibration(getVibration(cursor));//数据库保存值为1或0，有时间测试Boolean.parse是否有效
             schedule.setVolume(cursor.getInt(cursor.getColumnIndex(openHelper.VOLUME)));
@@ -198,8 +198,8 @@ public class DBUtil {
                 + UID + " INTEGER PRIMARY KEY AUTOINCREMENT, "//主键
                 + CATEGORY + " TEXT, "//日程类别
                 + DETAIL + " TEXT, "//日程详细信息
-                + TIME_START + " TEXT, "//日程开始时间
-                + TIME_LAST + " TEXT, "//日程持续时间
+                + TIME_START + " INTEGER, "//日程开始时间,使用UNIX时间，单位为秒（非毫秒）
+                + TIME_LAST + " INTEGER, "//日程持续时间，使用UNIX时间，单位为秒（非毫秒）
                 + URGENCY + " INTEGER, "//日程重要紧急度，为1234
                 + VIBRATION + " INTEGER, "//是否震动提示
                 + VOLUME + " INTEGER, "//提示音大小1~00;
@@ -217,11 +217,11 @@ public class DBUtil {
 //        private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE "+ TABLE_NAME_CATEGORY+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " + CATEGORY_NAME + " TEXT, " + TIME_TARGET + " TEXT, " + TIME_SUMMARY + " TEXT, " + PERIODICITY + " TEXT, " + TIME_CYCLE + " TEXT)";
         private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE " + TABLE_NAME_CATEGORY
                 + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + CATEGORY_NAME + " TEXT, "
-                + TIME_TARGET + " TEXT, "
-                + TIME_SUMMARY + " TEXT, "
-                + PERIODICITY + " TEXT, "
-                + TIME_CYCLE + " TEXT)";
+                + CATEGORY_NAME + " TEXT, "//日程类的名称
+                + TIME_TARGET + " INTEGER, "//日程类的目标总时间,使用UNIX时间，单位为秒（非毫秒）
+                + TIME_SUMMARY + " INTEGER, "//日程类目前已累积时间,使用UNIX时间，单位为秒（非毫秒）
+                + PERIODICITY + " TEXT, "//星期几有此日程
+                + TIME_CYCLE + " INTEGER)";//此日程类循环每周期时间,使用UNIX时间，单位为秒（非毫秒）
 
 
         //构造方法

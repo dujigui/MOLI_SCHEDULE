@@ -38,8 +38,12 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         currentSchedule = schedules.get(position);
 
         holder.iv_urgency.setImageResource(getUrgencyImage());
-        holder.tv_time_start.setText(getTimeStart());
-        holder.tv_time_last.setText(getTimeLast());
+
+//        holder.tv_time_start.setText(getTimeStart());
+//        holder.tv_time_last.setText(getTimeLast());
+        holder.tv_time_start.setText(DateTimeUtils.longToDate(currentSchedule.getTime_start()));
+        holder.tv_time_last.setText(DateTimeUtils.longToTime(currentSchedule.getTime_last()));
+
         holder.tv_schedule_detail.setText(currentSchedule.getDetail());
 
     }
@@ -129,17 +133,17 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         return R.drawable.ic_ring_1_1;
     }
 
-    private String getTimeStart() {
-        String[] date = currentSchedule.getTime_start().split(" ");
-        return date[0] + "年" + date[1] + "月" + date[2] + "日" + date[3] + "时" + date[4] + "分";
-    }
-
-    private String getTimeLast() {
-        String[] time = currentSchedule.getTime_last().split(" ");
-        if (time[0].equals(" ")) {
-            return time[1] + "分";
-        } else {
-            return time[0] + "时" + time[1] + "分";
-        }
-    }
+//    private String getTimeStart() {
+//        String[] date = currentSchedule.getTime_start().split(" ");
+//        return date[0] + "年" + date[1] + "月" + date[2] + "日" + date[3] + "时" + date[4] + "分";
+//    }
+//
+//    private String getTimeLast() {
+//        String[] time = currentSchedule.getTime_last().split(" ");
+//        if (time[0].equals(" ")) {
+//            return time[1] + "分";
+//        } else {
+//            return time[0] + "时" + time[1] + "分";
+//        }
+//    }
 }

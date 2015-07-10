@@ -7,15 +7,15 @@ package com.pheynix.moli_schedule;
 public class Category {
 
     private String category_name;
-    private String time_target;
-    private String time_summary;
+    private long time_target;
+    private long time_summary;
+    private long time_cycle;
     private String periodicity;
-    private String time_cycle;
 
     public Category() {
     }
 
-    public Category(String category_name, String time_target, String time_summary, String periodicity, String time_cycle) {
+    public Category(String category_name, long time_target, long time_summary, String periodicity, long time_cycle) {
         this.category_name = category_name;
         this.time_target = time_target;
         this.time_summary = time_summary;
@@ -31,19 +31,19 @@ public class Category {
         this.category_name = category_name;
     }
 
-    public String getTime_target() {
+    public long getTime_target() {
         return time_target;
     }
 
-    public void setTime_target(String time_target) {
+    public void setTime_target(long time_target) {
         this.time_target = time_target;
     }
 
-    public String getTime_summary() {
+    public long getTime_summary() {
         return time_summary;
     }
 
-    public void setTime_summary(String time_summary) {
+    public void setTime_summary(long time_summary) {
         this.time_summary = time_summary;
     }
 
@@ -55,11 +55,11 @@ public class Category {
         this.periodicity = periodicity;
     }
 
-    public String getTime_cycle() {
+    public long getTime_cycle() {
         return time_cycle;
     }
 
-    public void setTime_cycle(String time_cycle) {
+    public void setTime_cycle(long time_cycle) {
         this.time_cycle = time_cycle;
     }
 }

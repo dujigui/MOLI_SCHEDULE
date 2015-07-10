@@ -12,12 +12,12 @@ public class Schedule implements Serializable{
     //sqlite可保存null,INTEGER,REAL,TEXT,BLOB
     //BLOB二进制大型文件对象
 
-    private int id;//即数据库的PRIMARY KEY,写入数据库时由数据库自动生成，读出数据库时为"_id"，用于定位；
+    private int id;//即数据库的PRIMARY KEY,写入数据库时由数据库自动生成，读出数据库时为"_id"，操作数据时用于定位；
 
     private String category;//日程属于什么类别
     private String detail;//日程具体内容
-    private String time_start;//2015 06 28 08 59,日期＋时间，取出来后分割
-    private String time_last;//分钟
+    private long time_start;//使用UNIX时间，秒为单位（非毫秒）
+    private long time_last;//分钟
     private int urgency;//0==空 1==紧急重要 2==不紧急重要 3==紧急不重要 4==不紧急不重要
     private boolean vibration;//是否震动提示
     private int volume;//提示声音的大小1~100
@@ -26,7 +26,7 @@ public class Schedule implements Serializable{
     public Schedule() {
     }
 
-    public Schedule(int id, String category, String detail, String time_start, String time_last, int urgency, boolean vibration, int volume, int status) {
+    public Schedule(int id, String category, String detail, long time_start, long time_last, int urgency, boolean vibration, int volume, int status) {
         this.id = id;
         this.category = category;
         this.detail = detail;
@@ -62,19 +62,19 @@ public class Schedule implements Serializable{
         this.detail = detail;
     }
 
-    public String getTime_start() {
+    public long getTime_start() {
         return time_start;
     }
 
-    public void setTime_start(String time_start) {
+    public void setTime_start(long time_start) {
         this.time_start = time_start;
     }
 
-    public String getTime_last() {
+    public long getTime_last() {
         return time_last;
     }
 
-    public void setTime_last(String time_last) {
+    public void setTime_last(long time_last) {
         this.time_last = time_last;
     }
 

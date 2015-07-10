@@ -141,8 +141,8 @@ public class CreateScheduleCategory extends AppCompatActivity implements View.On
                 TimePickerDialog dialog = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(RadialPickerLayout radialPickerLayout, int i, int i1) {
-                        category.setTime_cycle(i + " " + i1);
-                        btn_time_cycle.setText(i+"时"+i1+"分");
+                        category.setTime_cycle(i*60*60 + i1*60);
+                        btn_time_cycle.setText(i + "时" + i1 + "分");
                     }
                 }, 0, 0, true);
                 dialog.show(getFragmentManager(),"time_cycle");
@@ -151,8 +151,8 @@ public class CreateScheduleCategory extends AppCompatActivity implements View.On
             case R.id.fab_create_category_done:
 
                 category.setPeriodicity(getPeriodicity());
-                category.setTime_summary("0");
-                category.setTime_target(et_time_target.getText().toString());
+                category.setTime_summary(0);
+                category.setTime_target(Integer.parseInt(et_time_target.getText().toString())*60*60);
                 category.setCategory_name(et_name.getText().toString());
 
                 dbUtil.addCategory(category);//初始化Category表格，新增“普通日程”和“新建日程”
