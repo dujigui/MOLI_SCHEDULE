@@ -1,33 +1,59 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="16dp"
     tools:context="com.pheynix.moli_schedule.SummaryDailyFragment">
 
+    <TextView
+        android:id="@+id/tv_complete_ratio_daily"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:paddingRight="10dp"
+        android:text="日程完成率" />
+
     <fragment
-        android:id="@+id/daily_percentage_view"
+        android:id="@+id/pv_complete_ratio_daily"
         android:name="com.pheynix.moli_schedule.PercentageView.PercentageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:layout_toRightOf="@id/tv_complete_ratio_daily"
         tools:layout="@layout/fragment_percentage_view" />
 
-    <!--<SeekBar-->
-        <!--android:id="@+id/seekBar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/daily_percentage_view" />-->
+    <TextView
+        android:id="@+id/tv_time_summary_daily"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@id/tv_complete_ratio_daily"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:paddingRight="10dp"
+        android:text="总日程时间" />
 
-    <EditText
-        android:id="@+id/et_percentage"
+    <fragment
+        android:id="@+id/pv_time_summary_daily"
+        android:name="com.pheynix.moli_schedule.PercentageView.PercentageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/pv_complete_ratio_daily"
+        android:layout_marginBottom="15dp"
+        android:layout_toRightOf="@id/tv_time_summary_daily"
+        tools:layout="@layout/fragment_percentage_view" />
 
-    <Button
-        android:id="@+id/btn_change_percentage"
-        android:text="change percentage"
+    <FrameLayout
+        android:id="@+id/div1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="1dp"
+        android:layout_below="@id/tv_time_summary_daily"
+        android:background="#25000000"></FrameLayout>
 
-</LinearLayout>
+
+
+
+</RelativeLayout>
