@@ -198,12 +198,12 @@ public class DBUtil {
                 + UID + " INTEGER PRIMARY KEY AUTOINCREMENT, "//主键
                 + CATEGORY + " TEXT, "//日程类别
                 + DETAIL + " TEXT, "//日程详细信息
-                + TIME_START + " INTEGER, "//日程开始时间,使用UNIX时间，单位为秒（非毫秒）
-                + TIME_LAST + " INTEGER, "//日程持续时间，使用UNIX时间，单位为秒（非毫秒）
+                + TIME_START + " INTEGER, "//日程开始时间,使用UNIX时间，单位为毫秒
+                + TIME_LAST + " INTEGER, "//日程持续时间，使用UNIX时间，单位为毫秒
                 + URGENCY + " INTEGER, "//日程重要紧急度，为1234
                 + VIBRATION + " INTEGER, "//是否震动提示
                 + VOLUME + " INTEGER, "//提示音大小1~00;
-                + STATUS + " INTEGER)";//123
+                + STATUS + " INTEGER)";//1、2、3分别是未完成、延期、已完成，目前只设计到13，延期功能待添加或不添加了
 
 
         private static final String TABLE_NAME_CATEGORY = "category";

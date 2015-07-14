@@ -67,6 +67,8 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     //应重新设计排版此Activity的布局，参考http://www.jcodecraeer.com/a/opensource/2015/0125/2358.html
     //应重新设计排版此Activity的布局，参考http://www.jcodecraeer.com/a/opensource/2015/0125/2358.html
     //应重新设计排版此Activity的布局，参考http://www.jcodecraeer.com/a/opensource/2015/0125/2358.html
+    //同时参考http://huaban.com/pins/418456085/
+    //http://huaban.com/pins/404132521/
 
 
 
