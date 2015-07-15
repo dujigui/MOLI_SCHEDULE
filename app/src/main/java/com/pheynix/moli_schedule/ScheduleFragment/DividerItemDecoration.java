@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pheynix.moli_schedule;
+package com.pheynix.moli_schedule.ScheduleFragment;
 
 import android.content.Context;
 import android.content.res.TypedArray;

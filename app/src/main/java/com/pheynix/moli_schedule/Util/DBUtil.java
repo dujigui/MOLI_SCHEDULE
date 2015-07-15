@@ -1,4 +1,4 @@
-package com.pheynix.moli_schedule;
+package com.pheynix.moli_schedule.Util;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,6 +7,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.pheynix.moli_schedule.Item.Category;
+import com.pheynix.moli_schedule.Item.Schedule;
+import com.pheynix.moli_schedule.Item.SummaryDailyItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;

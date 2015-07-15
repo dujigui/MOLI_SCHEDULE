@@ -1,4 +1,4 @@
-package com.pheynix.moli_schedule;
+package com.pheynix.moli_schedule.ScheduleFragment;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.pheynix.moli_schedule.R;
+import com.pheynix.moli_schedule.Util.DateTimeUtils;
+import com.pheynix.moli_schedule.Item.Schedule;
 
 import java.util.ArrayList;
 

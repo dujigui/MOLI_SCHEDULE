@@ -1,4 +1,4 @@
-package com.pheynix.moli_schedule;
+package com.pheynix.moli_schedule.ScheduleFragment;
 
 import android.view.View;
 

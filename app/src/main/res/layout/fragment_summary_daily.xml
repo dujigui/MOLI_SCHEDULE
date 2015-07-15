@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.pheynix.moli_schedule.SummaryDailyFragment">
+    tools:context="com.pheynix.moli_schedule.SummaryFragment.SummaryDailyFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_summary_daily"

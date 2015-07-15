@@ -5,13 +5,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.pheynix.moli_schedule.ScheduleFragment.ScheduleFragment;
+import com.pheynix.moli_schedule.SummaryFragment.SummarySchedule;
+
 /**
  * Created by pheynix on 6/24/15.
  */
-public class MainContentPageAdapter extends FragmentPagerAdapter {
+public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
     private Context mContext;
 
-    public MainContentPageAdapter(FragmentManager fm,Context context) {
+    public MainActivityViewPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         mContext = context;
     }

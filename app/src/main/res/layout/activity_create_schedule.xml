@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pheynix.moli_schedule.CreateSchedule">
+    tools:context="com.pheynix.moli_schedule.Creator.CreateSchedule">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/id_toolbar_create_schedule"

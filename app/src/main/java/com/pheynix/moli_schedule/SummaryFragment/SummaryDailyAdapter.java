@@ -1,4 +1,4 @@
-package com.pheynix.moli_schedule;
+package com.pheynix.moli_schedule.SummaryFragment;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pheynix.moli_schedule.CustomView.PercentageBar;
+import com.pheynix.moli_schedule.R;
+import com.pheynix.moli_schedule.Item.SummaryDailyItem;
 
 import java.util.ArrayList;
 

@@ -18,6 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.pheynix.moli_schedule.SummaryFragment.SummaryDailyFragment;
+import com.pheynix.moli_schedule.SummaryFragment.SummaryMonthlyFragment;
+import com.pheynix.moli_schedule.SummaryFragment.SummaryWeeklyFragment;
+import com.pheynix.moli_schedule.Util.DBUtil;
+import com.pheynix.moli_schedule.Item.Category;
+
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     private DrawerLayout mDrawerLayout;
@@ -25,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private NavigationView mNavigationView;
     private ViewPager mViewPager;
     private TabLayout tabs;
-    private MainContentPageAdapter mPageAdapter;
+    private MainActivityViewPagerAdapter mPageAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private DBUtil dbUtil;
     private FragmentManager fragmentManager;
@@ -69,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 //        在tab中删除记录页
 //        tabs.addTab(tabs.newTab());
 
-        mPageAdapter = new MainContentPageAdapter(getSupportFragmentManager(),this);
+        mPageAdapter = new MainActivityViewPagerAdapter(getSupportFragmentManager(),this);
 
         mViewPager.setAdapter(mPageAdapter);
         mViewPager.addOnPageChangeListener(this);

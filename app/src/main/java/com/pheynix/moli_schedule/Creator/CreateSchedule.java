@@ -1,4 +1,4 @@
-package com.pheynix.moli_schedule;
+package com.pheynix.moli_schedule.Creator;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pheynix.moli_schedule.R;
+import com.pheynix.moli_schedule.ScheduleFragment.ScheduleFragment;
+import com.pheynix.moli_schedule.TestMessage;
+import com.pheynix.moli_schedule.Util.DBUtil;
+import com.pheynix.moli_schedule.Util.DateTimeUtils;
+import com.pheynix.moli_schedule.Item.Schedule;
 import com.rey.material.widget.Slider;
 import com.rey.material.widget.Spinner;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;

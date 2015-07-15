@@ -17,12 +17,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateSchedule"
+            android:name=".Creator.CreateSchedule"
             android:label="@string/title_activity_create_schedule"
             android:theme="@style/MaterialStylesNoTranslucentStatus" >
         </activity>
         <activity
-            android:name=".CreateScheduleCategory"
+            android:name=".Creator.CreateScheduleCategory"
             android:label="@string/title_activity_create_schedule_category"
             android:theme="@style/MaterialStylesNoTranslucentStatus" >
         </activity>

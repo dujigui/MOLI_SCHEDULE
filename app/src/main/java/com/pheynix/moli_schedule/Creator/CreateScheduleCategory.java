@@ -1,4 +1,4 @@
-package com.pheynix.moli_schedule;
+package com.pheynix.moli_schedule.Creator;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
+import com.pheynix.moli_schedule.R;
+import com.pheynix.moli_schedule.Util.DBUtil;
+import com.pheynix.moli_schedule.Item.Category;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.CheckBox;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
