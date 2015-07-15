@@ -4,10 +4,11 @@ package com.pheynix.moli_schedule;
  * Created by pheynix on 7/10/15.
  */
 public class SummaryDailyItem {
+    //名称和百分比
     private String name;
     private float value;
 
-    public SummaryDailyItem(String name, int value) {
+    public SummaryDailyItem(String name, float value) {
         this.name = name;
         this.value = value;
     }

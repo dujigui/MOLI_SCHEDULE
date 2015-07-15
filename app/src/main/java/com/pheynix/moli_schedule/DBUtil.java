@@ -6,16 +6,29 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by pheynix on 6/29/15.
  */
 public class DBUtil {
 
+    //考虑是否需要和如何处理数据库出现的exception；
+    //考虑是否需要和如何处理数据库出现的exception；
+    //考虑是否需要和如何处理数据库出现的exception；
+    //考虑是否需要和如何处理数据库出现的exception；
+    //考虑是否需要和如何处理数据库出现的exception；
+
+    //是否需要关闭db，openHelper
+    //是否需要关闭db，openHelper
+    //是否需要关闭db，openHelper
+
     private DatabaseOpenHelper openHelper;
     private SQLiteDatabase db;
+
 
     //构造函数
     public DBUtil(Context context, String databaseName, SQLiteDatabase.CursorFactory factory, int databaseVersion) {
@@ -23,11 +36,13 @@ public class DBUtil {
         db = openHelper.getWritableDatabase();
     }
 
+
     //构造函数
     public DBUtil(Context context, int databaseVersion) {
         openHelper = new DatabaseOpenHelper(context, databaseVersion);
         db = openHelper.getWritableDatabase();
     }
+
 
     //构造函数
     public DBUtil(Context context) {
@@ -36,112 +51,12 @@ public class DBUtil {
     }
 
 
-//    public void insertData(Schedule schedule){
-//        ContentValues values = new ContentValues();
-//        db.insert(DatabaseOpenHelper.TABLE_NAME_SCHEDULE,null,values);
-//
-//        return ;
-//    }
-
-
-    //获取所有日程类名称
-    public ArrayList<String> getAllCategoryName() {
-        Cursor cursor = db.query(openHelper.TABLE_NAME_CATEGORY, new String[]{openHelper.CATEGORY_NAME}, null, null, null, null, null);
-        ArrayList<String> list = new ArrayList<>();
-
-        while (cursor.moveToNext()) {
-            String s = cursor.getString(cursor.getColumnIndex(openHelper.CATEGORY_NAME));
-            list.add(s);
-        }
-
-        return list;
-    }
-
-    public boolean deleteSchedule(int _id){
-        long isSucceed = db.delete(openHelper.TABLE_NAME_SCHEDULE,"_id = ?",new String[]{_id+""});
-        return isSucceed != -1;
-    }
-
-    //应该和changeScheduleStatus合并
-    //传入的schedule必须包含“_id”，使用"_id"定位数据库中的日程项
-    public void alterSchedule(Schedule schedule){
-
-        int id = schedule.getId();
-
-        ContentValues values = new ContentValues();
-        values.put(openHelper.CATEGORY, schedule.getCategory());
-        values.put(openHelper.DETAIL, schedule.getDetail());
-        values.put(openHelper.TIME_START, schedule.getTime_start());
-        values.put(openHelper.TIME_LAST, schedule.getTime_last());
-        values.put(openHelper.URGENCY, schedule.getUrgency());
-        values.put(openHelper.VIBRATION, schedule.isVibration());
-        values.put(openHelper.VOLUME, schedule.getVolume());
-        values.put(openHelper.STATUS, schedule.getStatus());
-
-        db.update(openHelper.TABLE_NAME_SCHEDULE, values, openHelper.UID + " = ?", new String[]{id + ""});
-    }
-
-    //操作日程的状态
-    public void changeScheduleStatus(int id, int flag) {
-        switch (flag) {
-            case 1://改为为未完成
-                doChange(id, flag);
-                break;
-            case 2://改为已延期，暂时不添加此状态
-
-                break;
-            case 3://改为已完成
-                doChange(id, flag);
-                break;
-        }
-    }
-
-    //changeScheduleStatus提取出来的方法，执行修改操作
-    private void doChange(int id, int flag) {
-        ContentValues values = new ContentValues();
-        values.put(openHelper.STATUS, flag);
-        db.update(openHelper.TABLE_NAME_SCHEDULE, values, openHelper.UID + " = ?", new String[]{id + ""});
-    }
-
-
-    //增加日程类
-    public void addCategory(Category category) {
-        ContentValues values = new ContentValues();
-        values.put(openHelper.CATEGORY_NAME, category.getCategory_name());
-        values.put(openHelper.TIME_TARGET, category.getTime_target());
-        values.put(openHelper.TIME_SUMMARY, category.getTime_summary());
-        values.put(openHelper.PERIODICITY, category.getPeriodicity());
-        values.put(openHelper.TIME_CYCLE, category.getTime_cycle());
-
-        db.insert(openHelper.TABLE_NAME_CATEGORY, null, values);
-
-    }
-
-    //增加日程
-    public void addSchedule(Schedule schedule) {
-        ContentValues values = new ContentValues();
-        values.put(openHelper.CATEGORY, schedule.getCategory());
-        values.put(openHelper.DETAIL, schedule.getDetail());
-        values.put(openHelper.TIME_START, schedule.getTime_start());
-        values.put(openHelper.TIME_LAST, schedule.getTime_last());
-        values.put(openHelper.URGENCY, schedule.getUrgency());
-        values.put(openHelper.VIBRATION, schedule.isVibration());
-        values.put(openHelper.VOLUME, schedule.getVolume());
-        values.put(openHelper.STATUS, schedule.getStatus());//创建时状态为“未完成”
-
-        db.insert(openHelper.TABLE_NAME_SCHEDULE, null, values);
-    }
-
     //检索所有的日程，应该改为检索昨天、今天、明天的日程；
+    //或者新开一个方法实现上述功能，这个方法用来供用户检索所有日程
     public ArrayList<Schedule> getAllSchedules() {
         ArrayList<Schedule> schedules = new ArrayList<>();
 
         //可以null表示选择所有列
-//        Cursor cursor = db.query(openHelper.TABLE_NAME_SCHEDULE,
-//                new String[]{openHelper.UID, openHelper.CATEGORY, openHelper.DETAIL, openHelper.TIME_START
-//                        , openHelper.TIME_LAST, openHelper.URGENCY, openHelper.VIBRATION, openHelper.VOLUME,openHelper.STATUS},
-//                null, null, null, null, null);
-
         Cursor cursor = db.query(openHelper.TABLE_NAME_SCHEDULE,
                 new String[]{openHelper.UID, openHelper.CATEGORY, openHelper.DETAIL, openHelper.TIME_START
                         , openHelper.TIME_LAST, openHelper.URGENCY, openHelper.VIBRATION, openHelper.VOLUME,openHelper.STATUS},
@@ -164,6 +79,7 @@ public class DBUtil {
         return schedules;
     }
 
+    //getAllSchedules重构出来的方法
     //从数据库的数据获取震动提示的状态
     private boolean getVibration(Cursor cursor) {
 
@@ -176,6 +92,220 @@ public class DBUtil {
                 return true;
         }
     }
+
+
+    //增加日程
+    public void addSchedule(Schedule schedule) {
+        ContentValues values = new ContentValues();
+        values.put(openHelper.CATEGORY, schedule.getCategory());
+        values.put(openHelper.DETAIL, schedule.getDetail());
+        values.put(openHelper.TIME_START, schedule.getTime_start());
+        values.put(openHelper.TIME_LAST, schedule.getTime_last());
+        values.put(openHelper.URGENCY, schedule.getUrgency());
+        values.put(openHelper.VIBRATION, schedule.isVibration());
+        values.put(openHelper.VOLUME, schedule.getVolume());
+        values.put(openHelper.STATUS, schedule.getStatus());//创建时状态为“未完成”
+
+        db.insert(openHelper.TABLE_NAME_SCHEDULE, null, values);
+    }
+
+
+    //根据id删除一条日程
+    public boolean deleteSchedule(int _id){
+        long isSucceed = db.delete(openHelper.TABLE_NAME_SCHEDULE,"_id = ?",new String[]{_id+""});
+        return isSucceed != -1;
+    }
+
+
+    //可以考虑和changeScheduleStatus合并
+    //传入的schedule必须包含“_id”，使用"_id"定位数据库中的日程项
+    public void alterSchedule(Schedule schedule){
+
+        int id = schedule.getId();
+
+        ContentValues values = new ContentValues();
+        values.put(openHelper.CATEGORY, schedule.getCategory());
+        values.put(openHelper.DETAIL, schedule.getDetail());
+        values.put(openHelper.TIME_START, schedule.getTime_start());
+        values.put(openHelper.TIME_LAST, schedule.getTime_last());
+        values.put(openHelper.URGENCY, schedule.getUrgency());
+        values.put(openHelper.VIBRATION, schedule.isVibration());
+        values.put(openHelper.VOLUME, schedule.getVolume());
+        values.put(openHelper.STATUS, schedule.getStatus());
+
+        db.update(openHelper.TABLE_NAME_SCHEDULE, values, openHelper.UID + " = ?", new String[]{id + ""});
+    }
+
+
+    //修改日程的状态
+    public void changeScheduleStatus(int id, int flag) {
+        //重构去掉
+//        switch (flag) {
+//            case 1://改为为未完成
+//                doChange(id, flag);
+//                break;
+//            case 2://改为已延期，暂时不添加此状态
+//
+//                break;
+//            case 3://改为已完成
+//                doChange(id, flag);
+//                break;
+//        }
+
+        ContentValues values = new ContentValues();
+        values.put(openHelper.STATUS, flag);
+        db.update(openHelper.TABLE_NAME_SCHEDULE, values, openHelper.UID + " = ?", new String[]{id + ""});
+
+    }
+
+    //重构去掉
+//    //changeScheduleStatus重构出来的方法，执行修改操作
+//    private void doChange(int id, int flag) {
+//        ContentValues values = new ContentValues();
+//        values.put(openHelper.STATUS, flag);
+//        db.update(openHelper.TABLE_NAME_SCHEDULE, values, openHelper.UID + " = ?", new String[]{id + ""});
+//    }
+
+
+    //获取所有日程类别名称
+    public ArrayList<String> getAllCategoryName() {
+
+        Cursor cursor = db.query(openHelper.TABLE_NAME_CATEGORY, new String[]{openHelper.CATEGORY_NAME}, null, null, null, null, null);
+        ArrayList<String> list = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            String s = cursor.getString(cursor.getColumnIndex(openHelper.CATEGORY_NAME));
+            list.add(s);
+        }
+
+        return list;
+    }
+
+
+    //增加日程别类
+    public void addCategory(Category category) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(openHelper.CATEGORY_NAME, category.getCategory_name());
+        values.put(openHelper.TIME_TARGET, category.getTime_target());
+        values.put(openHelper.TIME_SUMMARY, category.getTime_summary());
+        values.put(openHelper.PERIODICITY, category.getPeriodicity());
+        values.put(openHelper.TIME_CYCLE, category.getTime_cycle());
+
+        db.insert(openHelper.TABLE_NAME_CATEGORY, null, values);
+
+    }
+
+    //查询日度总结需要的数据
+    public ArrayList<SummaryDailyItem> getDailySummaryItems(){
+
+        //初始化
+        ArrayList<SummaryDailyItem> items = new ArrayList<>();
+        ArrayList<String> names = getAllCategoryName();
+
+        Calendar dayStart = Calendar.getInstance();
+        Calendar dayEnd = Calendar.getInstance();
+
+        dayStart.set(Calendar.HOUR_OF_DAY,0);
+        dayStart.set(Calendar.MINUTE,0);
+        dayStart.set(Calendar.SECOND,0);
+        dayStart.set(Calendar.MILLISECOND,0);
+        dayEnd.set(Calendar.DAY_OF_MONTH,dayEnd.get(Calendar.DAY_OF_MONTH)+1);
+        dayEnd.set(Calendar.HOUR_OF_DAY,0);
+        dayEnd.set(Calendar.MINUTE,0);
+        dayEnd.set(Calendar.SECOND,0);
+        dayEnd.set(Calendar.MILLISECOND,0);
+
+
+        //查询“时间总计”数据
+        Cursor cursor1 = db.query(openHelper.TABLE_NAME_SCHEDULE
+                ,new String[]{openHelper.TIME_LAST}
+                ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<?"
+                ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+""}
+                ,null,null,null);
+        items.add(new SummaryDailyItem("时间总计", getValue(cursor1,1)));
+        cursor1.close();
+
+        //查询“普通日程”数据
+        Cursor cursor2 = db.query(openHelper.TABLE_NAME_SCHEDULE
+                ,new String[]{openHelper.TIME_LAST}
+                ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<? AND "
+                + openHelper.CATEGORY + "=?"
+                ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+"","普通日程"}
+                ,null,null,null);
+        items.add(new SummaryDailyItem("普通日程", getValue(cursor2,1)));
+        cursor2.close();
+
+        //查询用户创建的日程类别的数据
+        for (int i = 2 ; i < names.size() ; i++){
+            //获取该日程类别今日累计时间
+            Cursor cursor3 = db.query(openHelper.TABLE_NAME_SCHEDULE
+                    ,new String[]{openHelper.TIME_LAST}
+                    ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<? AND "
+                    + openHelper.CATEGORY + "=?"
+                    ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+"",names.get(i)}
+                    ,null,null,null);
+            float f1 = getValue(cursor3,2);
+            cursor3.close();
+
+            //获取该日程类别当日规划时间
+            Cursor cursor4 = db.query(openHelper.TABLE_NAME_CATEGORY,new String[]{openHelper.TIME_CYCLE}
+                    ,openHelper.CATEGORY_NAME + "=?",new String[]{names.get(i)},null,null,null);
+            float f2 = getValue(cursor4, 3);
+            cursor4.close();
+
+            //添加数据
+            items.add(new SummaryDailyItem(names.get(i),100*f1/f2));
+
+        }
+
+        return items;
+
+    }
+
+    private float getValue(Cursor cursor,int flag){
+
+        long sum = 0;
+        long temp = 0;
+        float result = 0.0f;
+
+        while (cursor.moveToNext()){
+            //取出
+            switch (flag){
+                case 1:
+                case 2:
+                    temp = cursor.getLong(cursor.getColumnIndex(openHelper.TIME_LAST));
+                    break;
+                case 3:
+                    temp = cursor.getLong(cursor.getColumnIndex(openHelper.TIME_CYCLE));
+                    break;
+            }
+
+            //转换成秒数,汇总
+            temp = temp/1000 + 8*60*60;
+            sum = sum + temp;
+
+        }
+
+        switch (flag){
+            case 1:
+                //转换成百分比中的数字，例如58%中的58
+                result = (float)(100*sum/(8*60*60.0));
+                break;
+            case 2:
+            case 3:
+                //交由调用者自行转化
+                result = sum;
+                break;
+        }
+
+        Log.e("pheynix","sum " + sum);
+        return result;
+
+    }
+
+
 
     //建立数据库
     class DatabaseOpenHelper extends SQLiteOpenHelper {
@@ -218,10 +348,10 @@ public class DBUtil {
         private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE " + TABLE_NAME_CATEGORY
                 + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + CATEGORY_NAME + " TEXT, "//日程类的名称
-                + TIME_TARGET + " INTEGER, "//日程类的目标总时间,使用UNIX时间，单位为秒（非毫秒）
-                + TIME_SUMMARY + " INTEGER, "//日程类目前已累积时间,使用UNIX时间，单位为秒（非毫秒）
+                + TIME_TARGET + " INTEGER, "//日程类的目标总时间,使用UNIX时间，单位为毫秒
+                + TIME_SUMMARY + " INTEGER, "//日程类目前已累积时间,使用UNIX时间，单位为毫秒
                 + PERIODICITY + " TEXT, "//星期几有此日程
-                + TIME_CYCLE + " INTEGER)";//此日程类循环每周期时间,使用UNIX时间，单位为秒（非毫秒）
+                + TIME_CYCLE + " INTEGER)";//此日程类循环每周期时间,使用UNIX时间，单位为毫秒
 
 
         //构造方法

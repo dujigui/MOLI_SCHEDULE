@@ -63,8 +63,8 @@ public class SummaryDailyAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public int getItemViewType(int position) {
 
-        //TimeViewholder
-        if (position == 0){
+        //TimeViewHolder
+        if (position == 0 || position == 1){
             return 0;
         }else {
             return 1;
@@ -106,61 +106,3 @@ public class SummaryDailyAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 }
-
-
-
-
-
-
-
-
-//public class SummaryDailyAdapter extends RecyclerView.Adapter<SummaryDailyAdapter.SummaryDailyViewHolder> {
-//    private Context mContext;
-//    private LayoutInflater inflater;
-//
-//    public SummaryDailyAdapter(Context mContext) {
-//        this.mContext = mContext;
-//        inflater = LayoutInflater.from(mContext);
-//    }
-//
-//    @Override
-//    public SummaryDailyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//
-//        switch (viewType){
-//            case 0:
-//
-//                break;
-//            case 1:
-//
-//                break;
-//        }
-//
-//        return null;
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(SummaryDailyViewHolder holder, int position) {
-//
-//    }
-//
-//    @Override
-//    public int getItemViewType(int position) {
-//        if (position == 0){
-//            return 0;
-//        }else {
-//            return 1;
-//        }
-//    }
-//
-//    @Override
-//    public int getItemCount() {
-//        return 0;
-//    }
-//
-//    public class SummaryDailyViewHolder extends RecyclerView.ViewHolder{
-//        public SummaryDailyViewHolder(View itemView) {
-//            super(itemView);
-//        }
-//
-//    }
-//}

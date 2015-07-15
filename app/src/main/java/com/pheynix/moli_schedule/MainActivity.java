@@ -19,7 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
@@ -42,62 +42,24 @@ public class MainActivity extends AppCompatActivity {
             initCategory();
         }
         
-        initView();
+        initializeView();
 
-        setUpDrawer();
+        initializeDrawer();
 
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
-            case R.id.action_daily:
-
-                if (fragmentManager.findFragmentByTag("SummaryDailyFragment") == null){
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.add(R.id.container_fragment_summary,new SummaryDailyFragment(),"SummaryDailyFragment");
-                    transaction.commit();
-                }
-
-                break;
-            case R.id.action_weekly:
-
-                if (fragmentManager.findFragmentByTag("SummaryWeeklyFragment") == null){
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.add(R.id.container_fragment_summary,new SummaryWeeklyFragment(),"SummaryWeeklyFragment");
-                    transaction.commit();
-                }
-
-                break;
-            case R.id.action_monthly:
-
-                if (fragmentManager.findFragmentByTag("SummaryMonthlyFragment") == null){
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.add(R.id.container_fragment_summary,new SummaryMonthlyFragment(),"SummaryMonthlyFragment");
-                    transaction.commit();
-                }
-
-                break;
-        }
-
-        return true;
-    }
-
-    private void initView() {
+    private void initializeView() {
         //设置新的Toolbar
         mToolbar = (Toolbar) findViewById(R.id.id_toolbar);
         setSupportActionBar(mToolbar);
 
+        //NavigationView
         mDrawerLayout = (DrawerLayout) findViewById(R.id.id_drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.id_navigationView);
+
         //设置Viewpager和tabs
         mViewPager = (ViewPager) findViewById(R.id.id_viewPager);
         tabs = (TabLayout) findViewById(R.id.id_tabs);
@@ -110,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         mPageAdapter = new MainContentPageAdapter(getSupportFragmentManager(),this);
 
         mViewPager.setAdapter(mPageAdapter);
+        mViewPager.addOnPageChangeListener(this);
         tabs.setupWithViewPager(mViewPager);
 
         fragmentManager = getSupportFragmentManager();
@@ -118,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //设置汉堡包图标和菜单事件点击的响应逻辑
-    private void setUpDrawer() {
+    private void initializeDrawer() {
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
@@ -184,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         dbUtil.addCategory(category_new);
     }
 
+    //是否第一次启动此应用，用SharePreferences的方式保存
     public boolean isFirstLaunch() {
 
         SharedPreferences sharedPreferences = getSharedPreferences("pre_first_launch", Context.MODE_PRIVATE);
@@ -195,4 +159,84 @@ public class MainActivity extends AppCompatActivity {
 
         return isFirstLaunch;
     }
+
+
+    //add onPageChangeListener
+    //滑动过程调用
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    //滑动前调用
+    @Override
+    public void onPageSelected(int position) {
+        //重复代码，考虑重构
+        if (position == 1){
+            if (fragmentManager.findFragmentByTag("SummaryDailyFragment") == null){
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.container_fragment_summary, new SummaryDailyFragment(), "SummaryDailyFragment");
+                transaction.commit();
+                mViewPager.setCurrentItem(1);
+            }
+        }
+        if (position == 0){
+            if (fragmentManager.findFragmentByTag("SummaryDailyFragment") == null){
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.remove(fragmentManager.findFragmentByTag("SummaryDailyFragment"));
+                transaction.commit();
+            }
+        }
+    }
+
+    //0,1,2 == idle,dragging,setting，滑动状态
+    @Override
+    public void onPageScrollStateChanged(int state) {
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        //在SummaryFragment才让OptionMenu生效
+//        if (isSummaryFragment){
+//
+//        }
+
+        switch (item.getItemId()){
+            case R.id.action_daily:
+                if (fragmentManager.findFragmentByTag("SummaryDailyFragment") == null){
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.container_fragment_summary, new SummaryDailyFragment(), "SummaryDailyFragment");
+                    transaction.commit();
+                }
+                mViewPager.setCurrentItem(1);
+                break;
+            case R.id.action_weekly:
+                if (fragmentManager.findFragmentByTag("SummaryWeeklyFragment") == null){
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.container_fragment_summary, new SummaryWeeklyFragment(), "SummaryWeeklyFragment");
+                    transaction.commit();
+                }
+                mViewPager.setCurrentItem(1);
+                break;
+            case R.id.action_monthly:
+                if (fragmentManager.findFragmentByTag("SummaryMonthlyFragment") == null){
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.container_fragment_summary,new SummaryMonthlyFragment(),"SummaryMonthlyFragment");
+                    transaction.commit();
+                }
+                mViewPager.setCurrentItem(1);
+                break;
+        }
+
+        return true;
+    }
+
 }

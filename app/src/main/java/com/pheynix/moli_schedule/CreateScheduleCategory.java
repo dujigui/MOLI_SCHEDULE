@@ -16,6 +16,8 @@ import com.rey.material.widget.CheckBox;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.util.Calendar;
+
 public class CreateScheduleCategory extends AppCompatActivity implements View.OnClickListener {
     private EditText et_name,et_time_target;
     private Button btn_time_cycle;
@@ -141,7 +143,14 @@ public class CreateScheduleCategory extends AppCompatActivity implements View.On
                 TimePickerDialog dialog = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(RadialPickerLayout radialPickerLayout, int i, int i1) {
-                        category.setTime_cycle(i*60*60 + i1*60);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.clear();
+                        calendar.set(Calendar.HOUR_OF_DAY,i);
+                        calendar.set(Calendar.MINUTE,i1);
+
+                        category.setTime_cycle(calendar.getTimeInMillis());
+
+//                        category.setTime_cycle(i*60*60*1000 + i1*60*1000);
                         btn_time_cycle.setText(i + "时" + i1 + "分");
                     }
                 }, 0, 0, true);
@@ -152,7 +161,12 @@ public class CreateScheduleCategory extends AppCompatActivity implements View.On
 
                 category.setPeriodicity(getPeriodicity());
                 category.setTime_summary(0);
-                category.setTime_target(Integer.parseInt(et_time_target.getText().toString())*60*60);
+//                category.setTime_target(Integer.parseInt(et_time_target.getText().toString())*60*60*1000);
+                Calendar calendar = Calendar.getInstance();
+                calendar.clear();
+                calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(et_time_target.getText().toString()));
+                category.setTime_target(calendar.getTimeInMillis());
+
                 category.setCategory_name(et_name.getText().toString());
 
                 dbUtil.addCategory(category);//初始化Category表格，新增“普通日程”和“新建日程”

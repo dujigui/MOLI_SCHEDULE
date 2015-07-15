@@ -190,7 +190,7 @@ public class PercentageBar extends View {
             @Override
             public void run() {
 
-                for (double i = 0 ; i <= value ; i = i + 0.1){
+                for (double i = 0 ; i < value+0.1 ; i = i + 0.1){
                     try {
 
                         tempValue = (float)i;
