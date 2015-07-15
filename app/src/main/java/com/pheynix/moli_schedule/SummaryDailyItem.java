@@ -5,7 +5,7 @@ package com.pheynix.moli_schedule;
  */
 public class SummaryDailyItem {
     private String name;
-    private int value;
+    private float value;
 
     public SummaryDailyItem(String name, int value) {
         this.name = name;
@@ -23,7 +23,7 @@ public class SummaryDailyItem {
         this.name = name;
     }
 
-    public int getValue() {
+    public float getValue() {
         return value;
     }
 

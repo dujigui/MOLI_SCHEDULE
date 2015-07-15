@@ -33,7 +33,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
         schedules = dbUtil.getAllSchedules();
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_schedule);
-        mFab = (FloatingActionButton) view.findViewById(R.id.id_fab_fragment_schedule);
+        mFab = (FloatingActionButton) view.findViewById(R.id.fab_fragment_schedule);
         mFab.setOnClickListener(this);
 
         //设置recyclerView的layoutManager
@@ -55,7 +55,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
     public void onClick(View v) {
 
         switch (v.getId()){
-            case R.id.id_fab_fragment_schedule:
+            case R.id.fab_fragment_schedule:
 
                 //启动创建Schedule的Activity
                 Intent intent = new Intent(getActivity(),CreateSchedule.class);

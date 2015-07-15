@@ -1,7 +1,6 @@
 package com.pheynix.moli_schedule.CustomView;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,6 +10,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
+
+import java.text.DecimalFormat;
 
 /**
  * Created by pheynix on 7/14/15.
@@ -32,6 +33,10 @@ public class PercentageBar extends View {
     private Paint paintFront;
 
     private boolean isInitialize = false;
+    private boolean isPercentage = true;
+
+    Rect rectText;
+    String displayText;
 
 
 
@@ -56,6 +61,8 @@ public class PercentageBar extends View {
         paintFront.setStyle(Paint.Style.FILL);
         paintFront.setColor(colorFront);
         paintFront.setAntiAlias(true);
+
+        rectText = new Rect();
 
     }
 
@@ -98,21 +105,32 @@ public class PercentageBar extends View {
 
         }
 
-        //获得文字的尺寸
-        Rect rect = new Rect();
+
+
         paintFront.setTextSize(40);
-        String displayText = (int) value + "%";
-        paintFront.getTextBounds(displayText,0,displayText.length(),rect);
+
+        if (isPercentage){
+            displayText = (int) value + "%";
+        }else {
+            displayText = new DecimalFormat("0.0").format((value/100)*8*60) + "m";
+        }
+
+        paintFront.getTextBounds(displayText,0,displayText.length(),rectText);
+
+
+
+        //获得文字的尺寸
+
 
         //画文字，文字颜色由百分比的长度决定
-        if (viewWidth-(viewWidth*(value /100)+rect.width()/5+rect.width()/5) > rect.width()){
+        if (viewWidth-(viewWidth*(value /100)+5+5) > rectText.width()){
 
-            canvas.drawText(displayText,viewWidth*(value /100)+rect.width()/5,viewHeight/2+rect.height()/2,paintFront);
+            canvas.drawText(displayText,viewWidth*(value /100)+5,viewHeight/2+rectText.height()/2,paintFront);
 
         }else {
 
             paintFront.setColor(Color.WHITE);
-            canvas.drawText(displayText,viewWidth-rect.width()-rect.width()/5,viewHeight/2+rect.height()/2,paintFront);
+            canvas.drawText(displayText,viewWidth-rectText.width()-5-5,viewHeight/2+rectText.height()/2,paintFront);
             paintFront.setColor(colorFront);
 
         }
@@ -161,17 +179,22 @@ public class PercentageBar extends View {
         colorBackground = color;
     }
 
-    public void setValue(final int value){
+    public void setIsPercentage(boolean isPercentage){
+        this.isPercentage = isPercentage;
+
+    }
+
+    public void setValue(final float value){
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                for (int i = 0 ; i <= value ; i++){
+                for (double i = 0 ; i <= value ; i = i + 0.1){
                     try {
 
-                        tempValue = i;
-                        Thread.sleep(20);
+                        tempValue = (float)i;
+                        Thread.sleep(5);
                         Message message = new Message();
                         message.what = 1;
                         handler.sendMessage(message);
@@ -193,19 +216,4 @@ public class PercentageBar extends View {
         }
     };
 
-
-
-
-
-    //尺寸转化的封装
-    //用不上了好像～
-    private int dpToPx(int dp)
-    {
-        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
-    }
-
-    private int pxToDp(int px)
-    {
-        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
-    }
 }

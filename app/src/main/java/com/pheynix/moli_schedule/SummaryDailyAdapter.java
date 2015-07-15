@@ -5,6 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.pheynix.moli_schedule.CustomView.PercentageBar;
 
 import java.util.ArrayList;
 
@@ -27,35 +31,39 @@ public class SummaryDailyAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        if (viewType == 0) {
-//            return new RatioViewHolder(inflater.inflate(R.layout.item_image, parent, false));
-//        } else {
-//            return new TimeViewHolder(inflater.inflate(R.layout.item_text, parent, false));
-//        }
-        if (viewType == 0){
-//            PercentageView percentageView = new PercentageView();
-//            View view = percentageView.getView();
 
+        RelativeLayout item = (RelativeLayout) inflater.inflate(R.layout.summary_daily_item, null);
+        PercentageBar percentageBar = (PercentageBar) item.findViewById(R.id.pb_summary_daily_item_percentage);
+
+        if (viewType == 1){
+            return new PercentageViewHolder(item);
         }else {
-
+            return new TimeViewHolder(item);
         }
-
-        return null;
-
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-//        if (holder instanceof TimeViewHolder) {
-//            ((TimeViewHolder) holder).mTextView.setText(mTitles[position]);
-//        } else if (holder instanceof RatioViewHolder) {
-//            ((RatioViewHolder) holder).mTextView.setText(mTitles[position]);
-//        }
+        if (holder instanceof TimeViewHolder) {
+            ((TimeViewHolder) holder).percentageBar.setValue(items.get(position).getValue());
+            ((TimeViewHolder) holder).percentageBar.setIsPercentage(false);
+            ((TimeViewHolder) holder).percentageBar.setColorBackground(0xFFF1F566);
+            ((TimeViewHolder) holder).percentageBar.setColorFront(0xFFF1F566);
+
+            ((TimeViewHolder) holder).textView.setText(items.get(position).getName());
+        } else if (holder instanceof PercentageViewHolder) {
+            ((PercentageViewHolder) holder).percentageBar.setValue(items.get(position).getValue());
+            ((PercentageViewHolder) holder).percentageBar.setColorFront(0xFFF1F566);
+            ((PercentageViewHolder) holder).percentageBar.setColorBackground(0xFFF1F566);
+            ((PercentageViewHolder) holder).percentageBar.setValue(items.get(position).getValue());
+            ((PercentageViewHolder) holder).textView.setText(items.get(position).getName());
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
 
+        //TimeViewholder
         if (position == 0){
             return 0;
         }else {
@@ -71,16 +79,30 @@ public class SummaryDailyAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
     public static class TimeViewHolder extends RecyclerView.ViewHolder {
+        private TextView textView;
+        private PercentageBar percentageBar;
 
         public TimeViewHolder(View itemView) {
             super(itemView);
+
+            percentageBar = (PercentageBar) itemView.findViewById(R.id.pb_summary_daily_item_percentage);
+            textView = (TextView) itemView.findViewById(R.id.tv_summary_daily_item_name);
+
+            percentageBar.setIsPercentage(false);
         }
     }
 
 
-    public static class RatioViewHolder extends RecyclerView.ViewHolder {
-        public RatioViewHolder(View itemView) {
+    public static class PercentageViewHolder extends RecyclerView.ViewHolder {
+        private TextView textView;
+        private PercentageBar percentageBar;
+
+        public PercentageViewHolder(View itemView) {
             super(itemView);
+
+            percentageBar = (PercentageBar) itemView.findViewById(R.id.pb_summary_daily_item_percentage);
+            textView = (TextView) itemView.findViewById(R.id.tv_summary_daily_item_name);
+
         }
     }
 }
