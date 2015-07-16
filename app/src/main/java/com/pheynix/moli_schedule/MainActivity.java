@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         dbUtil = new DBUtil(this);
 
         if (isFirstLaunch()){
-            initCategory();
+            initializeCategory();
         }
         
         initializeView();
@@ -69,14 +69,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         //设置Viewpager和tabs
         mViewPager = (ViewPager) findViewById(R.id.id_viewPager);
         tabs = (TabLayout) findViewById(R.id.id_tabs);
-
         tabs.addTab(tabs.newTab());
         tabs.addTab(tabs.newTab());
-//        在tab中删除记录页
-//        tabs.addTab(tabs.newTab());
 
         mPageAdapter = new MainActivityViewPagerAdapter(getSupportFragmentManager(),this);
-
         mViewPager.setAdapter(mPageAdapter);
         mViewPager.addOnPageChangeListener(this);
         tabs.setupWithViewPager(mViewPager);
@@ -108,8 +104,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-//                不需要设置为check
-//                menuItem.setChecked(true);
 
                 switch (menuItem.getItemId()) {
                     case R.id.id_drawer_share:
@@ -145,26 +139,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private void initCategory() {
-        Category category_normal = new Category("普通日程",0,0,"-1",0);
-        dbUtil.addCategory(category_normal);
 
-        Category category_new = new Category("新建日程",0,0,"-1",0);
-        dbUtil.addCategory(category_new);
-    }
 
-    //是否第一次启动此应用，用SharePreferences的方式保存
-    public boolean isFirstLaunch() {
 
-        SharedPreferences sharedPreferences = getSharedPreferences("pre_first_launch", Context.MODE_PRIVATE);
-        boolean isFirstLaunch = sharedPreferences.getBoolean("isFirstLaunch",true);
-
-        if (isFirstLaunch){
-            sharedPreferences.edit().putBoolean("isFirstLaunch",false).commit();
-        }
-
-        return isFirstLaunch;
-    }
 
 
     //add onPageChangeListener
@@ -243,6 +220,29 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
 
         return true;
+    }
+
+
+    //初始化日程类别，首次启动程序时调用
+    private void initializeCategory() {
+        Category category_normal = new Category("普通日程",0,0,"-1",0);
+        dbUtil.addCategory(category_normal);
+
+        Category category_new = new Category("新建日程",0,0,"-1",0);
+        dbUtil.addCategory(category_new);
+    }
+
+    //是否第一次启动此应用，用SharePreferences的方式保存
+    public boolean isFirstLaunch() {
+
+        SharedPreferences sharedPreferences = getSharedPreferences("pre_first_launch", Context.MODE_PRIVATE);
+        boolean isFirstLaunch = sharedPreferences.getBoolean("isFirstLaunch",true);
+
+        if (isFirstLaunch){
+            sharedPreferences.edit().putBoolean("isFirstLaunch",false).commit();
+        }
+
+        return isFirstLaunch;
     }
 
 }

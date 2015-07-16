@@ -87,7 +87,7 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
         dbUtil = new DBUtil(this);
 
         //初始化应该尽量在所有操作前
-        initView();
+        initializeView();
 
         intent_schedule_fragment = getIntent();
 
@@ -162,21 +162,6 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
         }
     }
 
-//    private String getDisplayTime(){
-//        String[] time = oldSchedule.getTime_last().split(" ");
-//        timeBuffer = new StringBuffer();
-//        timeBuffer.append(time[0]+" "+time[1]);
-//        return time[0]+"时"+time[1]+"分";
-//
-//
-//    }
-//
-//    private String getDisplayDate(){
-//        String[] date = oldSchedule.getTime_start().split(" ");
-//        dateBuffer = new StringBuffer();
-//        dateBuffer.append(date[0] + " " + date[1] + " " + date[2] + " " + date[3] + " " + date[4]);
-//        return date[0]+"年"+date[1]+"月"+date[2]+"日"+date[3]+"时"+date[4]+"分";
-//    }
 
     private int getSpinnerPosition() {
         int i;
@@ -190,10 +175,10 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     }
 
 
-    private void initView() {
+    private void initializeView() {
 
         //显示Toolbar
-        mToolbar = (Toolbar) findViewById(R.id.id_toolbar_create_schedule);
+        mToolbar = (Toolbar) findViewById(R.id.tb_create_schedule);
         setSupportActionBar(mToolbar);
         //显示返回按钮
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pheynix.moli_schedule" >
+    package="com.pheynix.moli_schedule">
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,13 +19,15 @@
         <activity
             android:name=".Creator.CreateSchedule"
             android:label="@string/title_activity_create_schedule"
-            android:theme="@style/MaterialStylesNoTranslucentStatus" >
-        </activity>
+            android:theme="@style/MaterialStylesNoTranslucentStatus"></activity>
         <activity
             android:name=".Creator.CreateScheduleCategory"
             android:label="@string/title_activity_create_schedule_category"
-            android:theme="@style/MaterialStylesNoTranslucentStatus" >
-        </activity>
+            android:theme="@style/MaterialStylesNoTranslucentStatus"></activity>
+        <activity
+            android:name=".Creator.TimeRecorder.TimerActivity"
+            android:label="@string/title_activity_timer"
+            android:theme="@style/MaterialStylesNoTranslucentStatus"></activity>
     </application>
 
 </manifest>

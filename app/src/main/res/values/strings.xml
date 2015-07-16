@@ -48,5 +48,6 @@
     <string name="day">日</string>
     <string name="hour">时</string>
     <string name="minute">分</string>
+    <string name="title_activity_timer">TimerActivity</string>
 
 </resources>

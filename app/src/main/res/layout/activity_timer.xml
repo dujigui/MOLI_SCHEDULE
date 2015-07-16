@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.pheynix.moli_schedule.Creator.TimeRecorder.TimerActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_timer_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <LinearLayout
+        android:id="@+id/ll_timer_activity"
+        android:layout_below="@id/tb_timer_activity"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_done_timer_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="我做完了" />
+
+        <Button
+            android:id="@+id/btn_other_timer_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="先做其他" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_start_pause_timer_activity"
+        android:layout_alignParentBottom="true"
+        android:text="开始计时"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.pheynix.moli_schedule.CustomView.MoliTimer
+        android:id="@+id/moli_timer_timer_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_start_pause_timer_activity"
+        android:layout_below="@id/ll_timer_activity" />
+
+
+
+</RelativeLayout>

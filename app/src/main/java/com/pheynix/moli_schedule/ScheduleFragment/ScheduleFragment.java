@@ -13,15 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pheynix.moli_schedule.Creator.CreateSchedule;
+import com.pheynix.moli_schedule.Creator.TimeRecorder.TimerActivity;
+import com.pheynix.moli_schedule.Item.Schedule;
 import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.Util.DBUtil;
-import com.pheynix.moli_schedule.Item.Schedule;
 
 import java.util.ArrayList;
 
 public class ScheduleFragment extends Fragment implements View.OnClickListener,ScheduleClickListener {
     public static final int REQUEST_CODE_ALTER_SCHEDULE = 007;
     public static final int REQUEST_CODE_CREATE_SCHEDULE = 004;
+    public static final int REQUEST_CODE_TIMER_ACTIVITY = 012;
+
+    public static final String EXTRA_NAME_TIMER_ACTIVITY = "time_in_millis";
     public static final String SCHEDULE = "schedule_need_to_be_modify";
 
     private RecyclerView mRecyclerView;
@@ -70,6 +74,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
         }
     }
 
+
     //创建日程后返回主页面，更新数据
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -105,7 +110,12 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
         Schedule schedule = schedules.get(position);
         switch (schedule.getStatus()){
             case 1:
-                dbUtil.changeScheduleStatus(schedule.getId(),3);
+//                dbUtil.changeScheduleStatus(schedule.getId(),3);
+
+                Intent intent = new Intent(getActivity(), TimerActivity.class);
+                intent.putExtra(EXTRA_NAME_TIMER_ACTIVITY,schedule.getTime_last());
+                startActivityForResult(intent,REQUEST_CODE_TIMER_ACTIVITY);
+
                 break;
             case 2:
 

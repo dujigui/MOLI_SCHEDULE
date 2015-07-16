@@ -23,15 +23,13 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment = null;
 
-        if (position == 0){
-            fragment = new ScheduleFragment();
-        }
-//        在tab中删除记录页
-//        if (position == 1){
-//            fragment = new RecordFragment();
-//        }
-        if (position == 1){
-            fragment = new SummarySchedule();
+        switch (position){
+            case 0:
+                fragment = new ScheduleFragment();
+                break;
+            case 1:
+                fragment = new SummarySchedule();
+                break;
         }
 
         return fragment;

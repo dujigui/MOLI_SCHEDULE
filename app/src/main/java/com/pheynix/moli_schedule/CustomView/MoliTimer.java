@@ -79,6 +79,8 @@ public class MoliTimer extends View {
     private static final int colorSecond = 0xFF00BCD4;
     private static final int colorDragButton = 0x40000000;
 
+    private long millis = 0;
+
     //初始化
     private void initialize(Canvas canvas) {
 
@@ -184,6 +186,13 @@ public class MoliTimer extends View {
 
         if (isStarted){
             updateDegree();
+        }
+
+        if (millis != 0){
+            timeStart.setTimeInMillis(millis);
+            timeRemain.setTimeInMillis(millis);
+            updateDegree();
+            millis = 0;
         }
 
         canvas.drawCircle(centerXHour, centerYHour, circleRadiusHour, paintCircleBackground);
@@ -466,6 +475,14 @@ public class MoliTimer extends View {
         timerTask.cancel();
         isStarted = false;
         return timeStart.getTimeInMillis() - timeRemain.getTimeInMillis();
+    }
+
+    public void setTimeStart(Calendar calendar){
+        millis = calendar.getTimeInMillis();
+    }
+
+    public void setTimeStart(long time_in_millis){
+        millis = time_in_millis;
     }
 
     public Calendar getTimeStart(){
