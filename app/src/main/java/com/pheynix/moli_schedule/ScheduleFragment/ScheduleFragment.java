@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,10 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
         if (resultCode == CreateSchedule.RESULT_CODE_DELETE_SCHEDULE){
             updateSchedules();
         }
+        if (resultCode == TimerActivity.RESULT_CODE_DONE){
+            updateSchedules();
+            Log.e("pheynix",">>>>>>>>>>我在这er<<<<<<<<<<<");
+        }
     }
 
     //日程项点击时的回调函数
@@ -113,8 +118,8 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
 //                dbUtil.changeScheduleStatus(schedule.getId(),3);
 
                 Intent intent = new Intent(getActivity(), TimerActivity.class);
-                intent.putExtra(EXTRA_NAME_TIMER_ACTIVITY,schedule.getTime_last());
-                startActivityForResult(intent,REQUEST_CODE_TIMER_ACTIVITY);
+                intent.putExtra(EXTRA_NAME_TIMER_ACTIVITY,schedule);
+                startActivityForResult(intent, REQUEST_CODE_TIMER_ACTIVITY);
 
                 break;
             case 2:

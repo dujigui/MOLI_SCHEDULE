@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.pheynix.moli_schedule.Item.Category;
 import com.pheynix.moli_schedule.Item.Schedule;
@@ -62,9 +61,7 @@ public class DBUtil {
 
         //可以null表示选择所有列
         Cursor cursor = db.query(openHelper.TABLE_NAME_SCHEDULE,
-                new String[]{openHelper.UID, openHelper.CATEGORY, openHelper.DETAIL, openHelper.TIME_START
-                        , openHelper.TIME_LAST, openHelper.URGENCY, openHelper.VIBRATION, openHelper.VOLUME,openHelper.STATUS},
-                null, null, null, null, openHelper.STATUS+" ASC, "+openHelper.TIME_START+" ASC ");
+                null, null, null, null, null, openHelper.STATUS+" ASC, "+openHelper.TIME_START+" ASC ");
 
         while (cursor.moveToNext()) {
             Schedule schedule = new Schedule();
@@ -72,6 +69,7 @@ public class DBUtil {
             schedule.setCategory(cursor.getString(cursor.getColumnIndex(openHelper.CATEGORY)));
             schedule.setDetail(cursor.getString(cursor.getColumnIndex(openHelper.DETAIL)));
             schedule.setTime_start(cursor.getLong(cursor.getColumnIndex(openHelper.TIME_START)));
+            schedule.setTime_recorded(cursor.getLong(cursor.getColumnIndex(openHelper.TIME_RECORDED)));
             schedule.setTime_last(cursor.getLong(cursor.getColumnIndex(openHelper.TIME_LAST)));
             schedule.setUrgency(cursor.getInt(cursor.getColumnIndex(openHelper.URGENCY)));
             schedule.setVibration(getVibration(cursor));//数据库保存值为1或0，有时间测试Boolean.parse是否有效
@@ -95,6 +93,7 @@ public class DBUtil {
             default:
                 return true;
         }
+
     }
 
 
@@ -104,6 +103,7 @@ public class DBUtil {
         values.put(openHelper.CATEGORY, schedule.getCategory());
         values.put(openHelper.DETAIL, schedule.getDetail());
         values.put(openHelper.TIME_START, schedule.getTime_start());
+        values.put(openHelper.TIME_RECORDED,schedule.getTime_recorded());
         values.put(openHelper.TIME_LAST, schedule.getTime_last());
         values.put(openHelper.URGENCY, schedule.getUrgency());
         values.put(openHelper.VIBRATION, schedule.isVibration());
@@ -132,6 +132,7 @@ public class DBUtil {
         values.put(openHelper.DETAIL, schedule.getDetail());
         values.put(openHelper.TIME_START, schedule.getTime_start());
         values.put(openHelper.TIME_LAST, schedule.getTime_last());
+        values.put(openHelper.TIME_RECORDED,schedule.getTime_recorded());
         values.put(openHelper.URGENCY, schedule.getUrgency());
         values.put(openHelper.VIBRATION, schedule.isVibration());
         values.put(openHelper.VOLUME, schedule.getVolume());
@@ -143,32 +144,12 @@ public class DBUtil {
 
     //修改日程的状态
     public void changeScheduleStatus(int id, int flag) {
-        //重构去掉
-//        switch (flag) {
-//            case 1://改为为未完成
-//                doChange(id, flag);
-//                break;
-//            case 2://改为已延期，暂时不添加此状态
-//
-//                break;
-//            case 3://改为已完成
-//                doChange(id, flag);
-//                break;
-//        }
 
         ContentValues values = new ContentValues();
         values.put(openHelper.STATUS, flag);
         db.update(openHelper.TABLE_NAME_SCHEDULE, values, openHelper.UID + " = ?", new String[]{id + ""});
 
     }
-
-    //重构去掉
-//    //changeScheduleStatus重构出来的方法，执行修改操作
-//    private void doChange(int id, int flag) {
-//        ContentValues values = new ContentValues();
-//        values.put(openHelper.STATUS, flag);
-//        db.update(openHelper.TABLE_NAME_SCHEDULE, values, openHelper.UID + " = ?", new String[]{id + ""});
-//    }
 
 
     //获取所有日程类别名称
@@ -264,6 +245,8 @@ public class DBUtil {
 
         }
 
+        db.close();
+
         return items;
 
     }
@@ -287,24 +270,28 @@ public class DBUtil {
             }
 
             //转换成秒数,汇总
-            temp = temp/1000 + 8*60*60;
-            sum = sum + temp;
+            sum = sum + temp/1000;
 
         }
 
         switch (flag){
+
             case 1:
+
                 //转换成百分比中的数字，例如58%中的58
                 result = (float)(100*sum/(8*60*60.0));
+
                 break;
+
             case 2:
             case 3:
+
                 //交由调用者自行转化
                 result = sum;
                 break;
+
         }
 
-        Log.e("pheynix","sum " + sum);
         return result;
 
     }
@@ -322,6 +309,7 @@ public class DBUtil {
         private static final String DETAIL = "detail";
         private static final String TIME_START = "time_start";
         private static final String TIME_LAST = "time_last";
+        private static final String TIME_RECORDED = "timer_recorded";
         private static final String URGENCY = "urgency";
         private static final String VIBRATION = "vibration";
         private static final String VOLUME = "volume";
@@ -334,6 +322,7 @@ public class DBUtil {
                 + DETAIL + " TEXT, "//日程详细信息
                 + TIME_START + " INTEGER, "//日程开始时间,使用UNIX时间，单位为毫秒
                 + TIME_LAST + " INTEGER, "//日程持续时间，使用UNIX时间，单位为毫秒
+                + TIME_RECORDED + " INTEGER, "//日程已记录时间，使用UNIX时间，单位为毫秒
                 + URGENCY + " INTEGER, "//日程重要紧急度，为1234
                 + VIBRATION + " INTEGER, "//是否震动提示
                 + VOLUME + " INTEGER, "//提示音大小1~00;

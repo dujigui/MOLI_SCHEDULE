@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 日程数据封装
  * Created by pheynix on 6/24/15.
  */
-public class Schedule implements Serializable{
+public class Schedule implements Serializable {
 
     //日程数据
     //sqlite可保存null,INTEGER,REAL,TEXT,BLOB
@@ -18,6 +18,7 @@ public class Schedule implements Serializable{
     private String detail;//日程具体内容
     private long time_start;//使用UNIX时间，秒为单位（非毫秒）
     private long time_last;//分钟
+    private long time_recorded;
     private int urgency;//0==空 1==紧急重要 2==不紧急重要 3==紧急不重要 4==不紧急不重要
     private boolean vibration;//是否震动提示
     private int volume;//提示声音的大小1~100
@@ -26,12 +27,13 @@ public class Schedule implements Serializable{
     public Schedule() {
     }
 
-    public Schedule(int id, String category, String detail, long time_start, long time_last, int urgency, boolean vibration, int volume, int status) {
+    public Schedule(int id, String category, String detail, long time_start, long time_last, long time_recorded, int urgency, boolean vibration, int volume, int status) {
         this.id = id;
         this.category = category;
         this.detail = detail;
         this.time_start = time_start;
         this.time_last = time_last;
+        this.time_recorded = time_recorded;
         this.urgency = urgency;
         this.vibration = vibration;
         this.volume = volume;
@@ -76,6 +78,14 @@ public class Schedule implements Serializable{
 
     public void setTime_last(long time_last) {
         this.time_last = time_last;
+    }
+
+    public long getTime_recorded() {
+        return time_recorded;
+    }
+
+    public void setTime_recorded(long time_recorded) {
+        this.time_recorded = time_recorded;
     }
 
     public int getUrgency() {

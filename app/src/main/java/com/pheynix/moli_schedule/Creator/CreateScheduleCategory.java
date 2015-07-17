@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.pheynix.moli_schedule.R;
+import com.pheynix.moli_schedule.Util.CalendarUtil;
 import com.pheynix.moli_schedule.Util.DBUtil;
 import com.pheynix.moli_schedule.Item.Category;
 import com.rey.material.widget.Button;
@@ -39,23 +40,6 @@ public class CreateScheduleCategory extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_schedule_category);
 
-        mToolbar = (Toolbar) findViewById(R.id.tb_create_category);
-        setSupportActionBar(mToolbar);
-        //显示返回按钮
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //返回按钮销毁CreateSchedule Activity
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent();
-                intent.putExtra("isCreated",false);
-                setResult(003,intent);
-
-                finish();
-            }
-        });
 
         initView();
 
@@ -66,6 +50,28 @@ public class CreateScheduleCategory extends AppCompatActivity implements View.On
 
 
     private void initView() {
+
+        mToolbar = (Toolbar) findViewById(R.id.tb_create_category);
+        setSupportActionBar(mToolbar);
+
+        //显示返回按钮
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        //返回按钮销毁CreateSchedule Activity
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent();
+                intent.putExtra("isCreated",false);
+                setResult(003,intent);
+
+                finish();
+
+            }
+        });
+
         textInputLayout_name = (TextInputLayout) findViewById(R.id.tip_create_category_name);
         et_name = textInputLayout_name.getEditText();
 
@@ -136,7 +142,6 @@ public class CreateScheduleCategory extends AppCompatActivity implements View.On
         });
 
         btn_time_cycle.setOnClickListener(this);
-//        btn_periodicity.setOnClickListener(this);
     }
 
     @Override
@@ -146,27 +151,25 @@ public class CreateScheduleCategory extends AppCompatActivity implements View.On
                 TimePickerDialog dialog = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(RadialPickerLayout radialPickerLayout, int i, int i1) {
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.clear();
+
+                        Calendar calendar = CalendarUtil.getEmptyCalendarGreenwich();
                         calendar.set(Calendar.HOUR_OF_DAY,i);
                         calendar.set(Calendar.MINUTE,i1);
-
                         category.setTime_cycle(calendar.getTimeInMillis());
 
-//                        category.setTime_cycle(i*60*60*1000 + i1*60*1000);
                         btn_time_cycle.setText(i + "时" + i1 + "分");
+
                     }
                 }, 0, 0, true);
                 dialog.show(getFragmentManager(),"time_cycle");
+
                 break;
 
             case R.id.fab_create_category_done:
 
                 category.setPeriodicity(getPeriodicity());
                 category.setTime_summary(0);
-//                category.setTime_target(Integer.parseInt(et_time_target.getText().toString())*60*60*1000);
-                Calendar calendar = Calendar.getInstance();
-                calendar.clear();
+                Calendar calendar = CalendarUtil.getEmptyCalendarGreenwich();
                 calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(et_time_target.getText().toString()));
                 category.setTime_target(calendar.getTimeInMillis());
 
@@ -185,13 +188,6 @@ public class CreateScheduleCategory extends AppCompatActivity implements View.On
     }
 
     public String getPeriodicity() {
-//        cb_monday = (CheckBox) findViewById(R.id.cb_monday);
-//        cb_tuesday = (CheckBox) findViewById(R.id.cb_tuesday);
-//        cb_wednesday = (CheckBox) findViewById(R.id.cb_wednesday);
-//        cb_thursday = (CheckBox) findViewById(R.id.cb_thursday);
-//        cb_friday = (CheckBox) findViewById(R.id.cb_friday);
-//        cb_saturday = (CheckBox) findViewById(R.id.cb_saturday);
-//        cb_sunday = (CheckBox) findViewById(R.id.cb_sunday);
 
         StringBuffer buffer = new StringBuffer();
         if (cb_sunday.isChecked()){

@@ -5,12 +5,11 @@ import java.util.Calendar;
 /**
  * Created by pheynix on 7/10/15.
  */
-public class DateTimeUtils {
+public class DateTimeUtil {
 
-    public static String longToDate(long seconds){
-        Calendar calendar = Calendar.getInstance();
-        calendar.clear();
-        calendar.setTimeInMillis(seconds);
+    public static String longToDate(long millis){
+        Calendar calendar = CalendarUtil.getEmptyCalendarCurrentTimeZone();
+        calendar.setTimeInMillis(millis);
 
         StringBuffer buffer = new StringBuffer();
 //        buffer.append(calendar.get(Calendar.YEAR) + R.string.year);
@@ -30,10 +29,9 @@ public class DateTimeUtils {
         return buffer.toString();
     }
 
-    public static String longToTime(long seconds){
-        Calendar calendar = Calendar.getInstance();
-        calendar.clear();
-        calendar.setTimeInMillis(seconds);
+    public static String longToTime(long millis){
+        Calendar calendar = CalendarUtil.getEmptyCalendarGreenwich();
+        calendar.setTimeInMillis(millis);
 
         StringBuffer buffer = new StringBuffer();
 //        buffer.append(calendar.get(Calendar.HOUR_OF_DAY) + R.string.hour);

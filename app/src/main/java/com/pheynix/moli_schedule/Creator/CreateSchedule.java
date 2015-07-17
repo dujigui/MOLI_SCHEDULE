@@ -17,12 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pheynix.moli_schedule.Item.Schedule;
 import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.ScheduleFragment.ScheduleFragment;
-import com.pheynix.moli_schedule.TestMessage;
+import com.pheynix.moli_schedule.Util.CalendarUtil;
 import com.pheynix.moli_schedule.Util.DBUtil;
-import com.pheynix.moli_schedule.Util.DateTimeUtils;
-import com.pheynix.moli_schedule.Item.Schedule;
+import com.pheynix.moli_schedule.Util.DateTimeUtil;
 import com.rey.material.widget.Slider;
 import com.rey.material.widget.Spinner;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -51,20 +51,18 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     private SwitchCompat switch_vibration;
     private Intent intent_schedule_fragment;
 
-    private static final String PRE_CREATE_SCHEDULE = "create_schedule";
-    private static final String VOLUME = "volume";
-    private static final String VIBRATION = "vibration";
-
-//    private StringBuffer dateBuffer;
-//    private StringBuffer timeBuffer;
     private Calendar calendar_time_start;
     private Calendar calendar_time_last;
 
     private DBUtil dbUtil;
 
+    private static final String PRE_CREATE_SCHEDULE = "create_schedule";
+    private static final String VOLUME = "volume";
+    private static final String VIBRATION = "vibration";
     public static final int RESULT_CODE_CREATE_SCHEDULE = 005;
     public static final int RESULT_CODE_ALTER_SCHEDULE = 010;
     public static final int RESULT_CODE_DELETE_SCHEDULE = 011;
+
 
 
 
@@ -101,14 +99,11 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
             spinner_category.setSelection(getSpinnerPosition());
             et_schedule_detail.setText(oldSchedule.getDetail());
             et_schedule_detail.setSelection(oldSchedule.getDetail().length());
-
-//            tv_time_start.setText(getDisplayDate());
-//            tv_time_last.setText(getDisplayTime());
-            tv_time_start.setText(DateTimeUtils.longToDate(oldSchedule.getTime_start()));
-            tv_time_last.setText(DateTimeUtils.longToTime(oldSchedule.getTime_last()));
+            tv_time_start.setText(DateTimeUtil.longToDate(oldSchedule.getTime_start()));
+            tv_time_last.setText(DateTimeUtil.longToTime(oldSchedule.getTime_last()));
 
             setUpUrgency();
-            slider_volume.setValue((float) oldSchedule.getVolume(),false);
+            slider_volume.setValue((float)oldSchedule.getVolume(),false);
             switch_vibration.setChecked(oldSchedule.isVibration());
         }
     }
@@ -180,9 +175,11 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
         //显示Toolbar
         mToolbar = (Toolbar) findViewById(R.id.tb_create_schedule);
         setSupportActionBar(mToolbar);
+
         //显示返回按钮
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         //返回按钮销毁CreateSchedule Activity
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,14 +188,11 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
             }
         });
 
-        //重要－紧急
-        tv_quadrant_1_1 = (TextView) findViewById(R.id.tv_quadrant_1_1);
-        //重要－不紧急
-        tv_quadrant_1_0 = (TextView) findViewById(R.id.tv_quadrant_1_0);
-        //不重要－紧急
-        tv_quadrant_0_1 = (TextView) findViewById(R.id.tv_quadrant_0_1);
-        //不重要－不紧急
-        tv_quadrant_0_0 = (TextView) findViewById(R.id.tv_quadrant_0_0);
+
+        tv_quadrant_1_1 = (TextView) findViewById(R.id.tv_quadrant_1_1);//重要－紧急
+        tv_quadrant_1_0 = (TextView) findViewById(R.id.tv_quadrant_1_0);//重要－不紧急
+        tv_quadrant_0_1 = (TextView) findViewById(R.id.tv_quadrant_0_1);//不重要－紧急
+        tv_quadrant_0_0 = (TextView) findViewById(R.id.tv_quadrant_0_0);//不重要－不紧急
 
         ic_quadrant_1_1 = (ImageView) findViewById(R.id.ic_quadrant_1_1);
         ic_quadrant_1_0 = (ImageView) findViewById(R.id.ic_quadrant_1_0);
@@ -210,12 +204,8 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
         ic_quadrant_0_1.setOnClickListener(this);
         ic_quadrant_0_0.setOnClickListener(this);
 
-        calendar_time_last = Calendar.getInstance();
-        calendar_time_start = Calendar.getInstance();
-        calendar_time_last.clear();
-        calendar_time_start.clear();
-//        Log.e("pheynix",calendar_time_start.getTimeInMillis()+"");
-//        Log.e("pheynix",calendar_time_last.getTimeInMillis()+"");
+        calendar_time_start = CalendarUtil.getEmptyCalendarCurrentTimeZone();
+        calendar_time_last = CalendarUtil.getEmptyCalendarGreenwich();
 
         tv_time_start = (TextView) findViewById(R.id.id_time_start);
         tv_time_last = (TextView) findViewById(R.id.id_time_last);
@@ -286,12 +276,11 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     //响应开始时间－选择日期Dialog
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int i, int i1, int i2) {
+
         date = i+"年"+(i1+1)+"月"+i2+"日";
-//        dateBuffer = new StringBuffer(i+" "+i1+" "+i2 +" ");
         calendar_time_start.set(Calendar.YEAR,i);
         calendar_time_start.set(Calendar.MONTH,i1);//Calendar中的month是0基的（0 == 1月），正好这个Dialog出来的i1也是0基的..........表示非常无语
         calendar_time_start.set(Calendar.DAY_OF_MONTH,i2);
-
 
         showTimePickerDialog();
 
@@ -303,7 +292,6 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
         time = i+"时"+i1+"分";
         tv_time_start.setText(date+time);
 
-//        dateBuffer.append(i + " " + i1);
         calendar_time_start.set(Calendar.HOUR_OF_DAY,i);
         calendar_time_start.set(Calendar.MINUTE,i1);
 
@@ -325,34 +313,37 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
         if (v.getId() != R.id.fab_create_schedule){
             hideTextView();
         }
+
         switch (v.getId()){
+
             //重要－紧急
             case R.id.ic_quadrant_1_1:
                 tv_quadrant_1_1.setVisibility(View.VISIBLE);
                 break;
+
             //重要－不紧急
             case R.id.ic_quadrant_1_0:
                 tv_quadrant_1_0.setVisibility(View.VISIBLE);
                 break;
+
             //不重要－紧急
             case R.id.ic_quadrant_0_1:
                 tv_quadrant_0_1.setVisibility(View.VISIBLE);
                 break;
+
             //不重要－不紧急
             case R.id.ic_quadrant_0_0:
                 tv_quadrant_0_0.setVisibility(View.VISIBLE);
                 break;
+
             //FloatingActionBar响应逻辑
             case R.id.fab_create_schedule:
 
                 newSchedule.setCategory(category.get(spinner_category.getSelectedItemPosition()));
                 newSchedule.setDetail(et_schedule_detail.getText().toString());
-
-//                newSchedule.setTime_start(dateBuffer.toString());
-//                newSchedule.setTime_last(timeBuffer.toString());
                 newSchedule.setTime_start(calendar_time_start.getTimeInMillis());
                 newSchedule.setTime_last(calendar_time_last.getTimeInMillis());
-
+                newSchedule.setTime_recorded(0l);
                 newSchedule.setUrgency(getUrgency());
                 newSchedule.setVibration(switch_vibration.isChecked());
                 newSchedule.setVolume(slider_volume.getValue());
@@ -368,6 +359,7 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
                     intent.putExtra("isAltered",true);
                     setResult(RESULT_CODE_ALTER_SCHEDULE,intent);
                     Toast.makeText(this,"日程已修改！",Toast.LENGTH_SHORT).show();
+
                 }else {
 
                     newSchedule.setStatus(1);//创建日程默认状态为“未完成”
@@ -377,6 +369,7 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
                     intent.putExtra("isCreated",true);
                     setResult(RESULT_CODE_CREATE_SCHEDULE,intent);
                     Toast.makeText(this,"日程创建成功！",Toast.LENGTH_SHORT).show();
+
                 }
 
                 SharedPreferences sharedPreferences = getSharedPreferences(PRE_CREATE_SCHEDULE,Context.MODE_PRIVATE);
@@ -410,19 +403,18 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
     @Override
     public boolean onItemClick(final Spinner spinner, View view, int i, long l) {
         switch (i){
-            case 0:
 
-                break;
             case 1:
-                //跳转到新的Activity完成Category的创建
+
+                //跳转到新的Activity完成日程类别的创建
                 Intent intent = new Intent(this,CreateScheduleCategory.class);
                 startActivityForResult(intent,001);
                 break;
-            default:
 
-                break;
         }
+
         return true;
+
     }
 
     @Override
@@ -431,18 +423,22 @@ public class CreateSchedule extends AppCompatActivity implements TimePickerDialo
 
         //创建成功更新spinner
         if (resultCode == 002){
+
             Toast.makeText(this,"新日程类创建成功",Toast.LENGTH_SHORT).show();
+
+            //可修改为category.clear()然后category.addAll()，从而避免创建新的adapter
             category = new DBUtil(this).getAllCategoryName();
-            ArrayAdapter<String> newAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,category);
+            ArrayAdapter<String> newAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,category);
             spinner_category.setAdapter(newAdapter);
             spinner_category.setSelection(category.size()-1);
 
-
         }
+
         //创建取消更新spinner
         if (resultCode == 003){
             spinner_category.setSelection(0);
-            new TestMessage(CreateSchedule.this,"已取消创建新日程类");
+            Toast.makeText(this,"已取消创建新日程类",Toast.LENGTH_SHORT).show();
         }
+
     }
 }

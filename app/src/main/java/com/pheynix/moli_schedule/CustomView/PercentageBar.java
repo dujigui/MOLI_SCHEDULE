@@ -112,7 +112,7 @@ public class PercentageBar extends View {
         if (isPercentage){
             displayText = (int) value + "%";
         }else {
-            displayText = new DecimalFormat("0.0").format((value/100)*8*60) + "m";
+            displayText = new DecimalFormat("0").format((value/100)*8*60) + "m";
         }
 
         paintFront.getTextBounds(displayText,0,displayText.length(),rectText);
