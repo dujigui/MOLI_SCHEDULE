@@ -529,6 +529,11 @@ public class MoliTimer extends View {
                 //时间为空，停止倒计时，提示用户
                 case 2:
                     isStarted = false;
+
+                    if (timeChangeListener != null){
+                        timeChangeListener.onTimeStop(timeStart.getTimeInMillis(),timeRemain.getTimeInMillis());
+                    }
+
                     timerTask.cancel();
                     break;
             }

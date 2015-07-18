@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +91,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
         }
         if (resultCode == TimerActivity.RESULT_CODE_DONE){
             updateSchedules();
-            Log.e("pheynix",">>>>>>>>>>我在这er<<<<<<<<<<<");
         }
     }
 
@@ -115,11 +113,10 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
         Schedule schedule = schedules.get(position);
         switch (schedule.getStatus()){
             case 1:
-//                dbUtil.changeScheduleStatus(schedule.getId(),3);
 
-                Intent intent = new Intent(getActivity(), TimerActivity.class);
-                intent.putExtra(EXTRA_NAME_TIMER_ACTIVITY,schedule);
-                startActivityForResult(intent, REQUEST_CODE_TIMER_ACTIVITY);
+                Intent intent1 = new Intent(getActivity(), TimerActivity.class);
+                intent1.putExtra(EXTRA_NAME_TIMER_ACTIVITY,schedule);
+                startActivityForResult(intent1, REQUEST_CODE_TIMER_ACTIVITY);
 
                 break;
             case 2:
@@ -127,7 +124,11 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
                 break;
 
             case 3:
-                dbUtil.changeScheduleStatus(schedule.getId(),1);
+
+                Intent intent2 = new Intent(getActivity(), TimerActivity.class);
+                intent2.putExtra(EXTRA_NAME_TIMER_ACTIVITY,schedule);
+                startActivityForResult(intent2, REQUEST_CODE_TIMER_ACTIVITY);
+
                 break;
             default:
                 break;
