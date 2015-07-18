@@ -18,14 +18,14 @@ import java.util.ArrayList;
  * Created by pheynix on 7/10/15.
  */
 
-public class SummaryDailyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DailySummaryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     private final LayoutInflater inflater;
     private final Context mContext;
     private ArrayList<SummaryDailyItem> items;
 
-    public SummaryDailyAdapter(Context context,ArrayList<SummaryDailyItem> items) {
+    public DailySummaryAdapter(Context context, ArrayList<SummaryDailyItem> items) {
         mContext = context;
         inflater = LayoutInflater.from(context);
         this.items = items;

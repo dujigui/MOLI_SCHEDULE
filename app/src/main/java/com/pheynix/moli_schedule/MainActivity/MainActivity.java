@@ -1,4 +1,4 @@
-package com.pheynix.moli_schedule;
+package com.pheynix.moli_schedule.MainActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,9 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.pheynix.moli_schedule.SummaryFragment.SummaryDailyFragment;
-import com.pheynix.moli_schedule.SummaryFragment.SummaryMonthlyFragment;
-import com.pheynix.moli_schedule.SummaryFragment.SummaryWeeklyFragment;
+import com.pheynix.moli_schedule.R;
+import com.pheynix.moli_schedule.SummaryFragment.DailySummaryFragment;
+import com.pheynix.moli_schedule.SummaryFragment.MonthlySummaryFragment;
+import com.pheynix.moli_schedule.SummaryFragment.WeeklySummaryFragment;
 import com.pheynix.moli_schedule.Util.DBUtil;
 import com.pheynix.moli_schedule.Item.Category;
 
@@ -155,17 +156,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onPageSelected(int position) {
         //重复代码，考虑重构
         if (position == 1){
-            if (fragmentManager.findFragmentByTag("SummaryDailyFragment") == null){
+            if (fragmentManager.findFragmentByTag("DailySummaryFragment") == null){
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.container_fragment_summary, new SummaryDailyFragment(), "SummaryDailyFragment");
+                transaction.replace(R.id.container_fragment_summary, new DailySummaryFragment(), "DailySummaryFragment");
                 transaction.commit();
                 mViewPager.setCurrentItem(1);
             }
         }
         if (position == 0){
-            if (fragmentManager.findFragmentByTag("SummaryDailyFragment") == null){
+            if (fragmentManager.findFragmentByTag("DailySummaryFragment") == null){
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.remove(fragmentManager.findFragmentByTag("SummaryDailyFragment"));
+                transaction.remove(fragmentManager.findFragmentByTag("DailySummaryFragment"));
                 transaction.commit();
             }
         }
@@ -194,25 +195,25 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         switch (item.getItemId()){
             case R.id.action_daily:
-                if (fragmentManager.findFragmentByTag("SummaryDailyFragment") == null){
+                if (fragmentManager.findFragmentByTag("DailySummaryFragment") == null){
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.container_fragment_summary, new SummaryDailyFragment(), "SummaryDailyFragment");
+                    transaction.replace(R.id.container_fragment_summary, new DailySummaryFragment(), "DailySummaryFragment");
                     transaction.commit();
                 }
                 mViewPager.setCurrentItem(1);
                 break;
             case R.id.action_weekly:
-                if (fragmentManager.findFragmentByTag("SummaryWeeklyFragment") == null){
+                if (fragmentManager.findFragmentByTag("WeeklySummaryFragment") == null){
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.container_fragment_summary, new SummaryWeeklyFragment(), "SummaryWeeklyFragment");
+                    transaction.replace(R.id.container_fragment_summary, new WeeklySummaryFragment(), "WeeklySummaryFragment");
                     transaction.commit();
                 }
                 mViewPager.setCurrentItem(1);
                 break;
             case R.id.action_monthly:
-                if (fragmentManager.findFragmentByTag("SummaryMonthlyFragment") == null){
+                if (fragmentManager.findFragmentByTag("MonthlySummaryFragment") == null){
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.container_fragment_summary,new SummaryMonthlyFragment(),"SummaryMonthlyFragment");
+                    transaction.replace(R.id.container_fragment_summary,new MonthlySummaryFragment(),"MonthlySummaryFragment");
                     transaction.commit();
                 }
                 mViewPager.setCurrentItem(1);

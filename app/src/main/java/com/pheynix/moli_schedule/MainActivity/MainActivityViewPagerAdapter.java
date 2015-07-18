@@ -1,10 +1,11 @@
-package com.pheynix.moli_schedule;
+package com.pheynix.moli_schedule.MainActivity;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.ScheduleFragment.ScheduleFragment;
 import com.pheynix.moli_schedule.SummaryFragment.SummarySchedule;
 

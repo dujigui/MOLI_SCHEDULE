@@ -13,10 +13,10 @@ import com.pheynix.moli_schedule.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SummaryWeeklyFragment extends Fragment {
+public class WeeklySummaryFragment extends Fragment {
 
 
-    public SummaryWeeklyFragment() {
+    public WeeklySummaryFragment() {
         // Required empty public constructor
     }
 

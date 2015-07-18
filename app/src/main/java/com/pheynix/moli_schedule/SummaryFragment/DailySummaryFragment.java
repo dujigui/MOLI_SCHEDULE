@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SummaryDailyFragment extends Fragment implements View.OnClickListener {
+public class DailySummaryFragment extends Fragment implements View.OnClickListener {
     private View view;
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFab;
@@ -29,7 +29,7 @@ public class SummaryDailyFragment extends Fragment implements View.OnClickListen
     private DBUtil dbUtil;
 
 
-    public SummaryDailyFragment() {
+    public DailySummaryFragment() {
     }
 
 
@@ -46,7 +46,7 @@ public class SummaryDailyFragment extends Fragment implements View.OnClickListen
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_summary_daily);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        SummaryDailyAdapter mAdapter = new SummaryDailyAdapter(getActivity(),dbUtil.getDailySummaryItems());
+        DailySummaryAdapter mAdapter = new DailySummaryAdapter(getActivity(),dbUtil.getDailySummaryItems());
         mRecyclerView.setAdapter(mAdapter);
 
         return view;
