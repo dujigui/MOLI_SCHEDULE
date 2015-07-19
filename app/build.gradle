@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.pheynix.moli_schedule"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }
@@ -23,18 +23,18 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.android.support:recyclerview-v7:22.2.0'//RecyclerView支持包
-
     compile 'com.android.support:design:22.2.0'//包含MaterialDesign的8个组件
+    compile 'com.android.support:cardview-v7:21.0.3'//cardView,使用：weekly_summary_item
 
-    compile 'de.hdodenhof:circleimageview:1.3.0'//圆形ImageView，使用：NavigationDrawer,ScheduleFragment item
-
-//    compile 'com.alexzh:circleimageview:1.0.0@aar'//另一个圆形ImageView，使用：ScheduleFragment
+    compile 'de.hdodenhof:circleimageview:1.3.0'//圆形ImageView，使用：NavigationDrawer
 
     compile 'com.wdullaer:materialdatetimepicker:1.3.1'//日期选择器，Support for Android 4.0 and up.
 
-//    compile 'com.github.navasmdc:MaterialDesign:1.5@aar'//一堆Material组件,from  https://github.com/navasmdc/MaterialDesignLibrary,已使用slider
-
-    compile 'com.github.rey5137:material:1.1.1'//上面的用不了～～～～～
+    compile 'com.github.rey5137:material:1.1.1'//Material控件
 
     compile 'me.drakeet.materialdialog:library:1.2.2'//dialog,考虑自己绘制
+
+    compile 'com.github.lecho:hellocharts-library:1.5.5@aar'//图表控件,weekly_summary_item,monthly_summay_item
+
+
 }

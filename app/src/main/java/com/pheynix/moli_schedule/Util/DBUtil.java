@@ -183,14 +183,17 @@ public class DBUtil {
     }
 
     //查询日度总结需要的数据
-    public ArrayList<SummaryDailyItem> getDailySummaryItems(){
+    public ArrayList<SummaryDailyItem> getSummaryItems(Calendar day){
 
         //初始化
         ArrayList<SummaryDailyItem> items = new ArrayList<>();
         ArrayList<String> names = getAllCategoryName();
 
+        //尝试使用Calendar.clone
         Calendar dayStart = Calendar.getInstance();
         Calendar dayEnd = Calendar.getInstance();
+        dayStart.setTimeInMillis(day.getTimeInMillis());
+        dayEnd.setTimeInMillis(day.getTimeInMillis());
 
         dayStart.set(Calendar.HOUR_OF_DAY,0);
         dayStart.set(Calendar.MINUTE,0);
@@ -206,8 +209,9 @@ public class DBUtil {
         //查询“时间总计”数据
         Cursor cursor1 = db.query(openHelper.TABLE_NAME_SCHEDULE
                 ,new String[]{openHelper.TIME_LAST}
-                ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<?"
-                ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+""}
+                ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<? AND "
+                + openHelper.STATUS + "=?"
+                ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+"","3"}
                 ,null,null,null);
         items.add(new SummaryDailyItem("时间总计", getValue(cursor1,1)));
         cursor1.close();
@@ -216,11 +220,38 @@ public class DBUtil {
         Cursor cursor2 = db.query(openHelper.TABLE_NAME_SCHEDULE
                 ,new String[]{openHelper.TIME_LAST}
                 ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<? AND "
-                + openHelper.CATEGORY + "=?"
-                ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+"","普通日程"}
+                + openHelper.CATEGORY + "=? AND " + openHelper.STATUS + "=?"
+                ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+"","普通日程","3"}
                 ,null,null,null);
         items.add(new SummaryDailyItem("普通日程", getValue(cursor2,1)));
         cursor2.close();
+
+        //查询“完成率”数据
+        Cursor cursor5 = db.query(openHelper.TABLE_NAME_SCHEDULE
+                ,new String[]{openHelper.STATUS}
+                ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<?"
+                ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+""}
+                ,null,null,null);
+
+        int completed = 0;
+        int total = 0;
+
+        while (cursor5.moveToNext()){
+            int status = cursor5.getInt(cursor5.getColumnIndex(openHelper.STATUS));
+            if (status == 3){
+                completed = completed + 1 ;
+            }
+            total = total + 1 ;
+        }
+
+        if (total == 0){
+            items.add(new SummaryDailyItem("完成率",0f));
+        }else {
+            items.add(new SummaryDailyItem("完成率", (float)(100*completed/total)));
+        }
+
+        cursor5.close();
+
 
         //查询用户创建的日程类别的数据
         for (int i = 2 ; i < names.size() ; i++){
@@ -245,7 +276,6 @@ public class DBUtil {
 
         }
 
-        db.close();
 
         return items;
 

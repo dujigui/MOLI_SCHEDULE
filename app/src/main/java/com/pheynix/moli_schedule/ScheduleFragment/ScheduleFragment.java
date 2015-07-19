@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pheynix.moli_schedule.Creator.CreateSchedule;
-import com.pheynix.moli_schedule.Creator.TimeRecorder.TimerActivity;
+import com.pheynix.moli_schedule.Creator.TimerActivity;
 import com.pheynix.moli_schedule.Item.Schedule;
 import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.Util.DBUtil;

@@ -1,4 +1,4 @@
-package com.pheynix.moli_schedule.Creator.TimeRecorder;
+package com.pheynix.moli_schedule.Creator;
 
 import android.content.Intent;
 import android.media.Ringtone;
@@ -159,7 +159,6 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
 
         Intent intent = new Intent();
         setResult(RESULT_CODE_DONE,intent);
-        moliTimer.stop();
         finish();
 
     }

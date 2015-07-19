@@ -25,7 +25,7 @@
             android:label="@string/title_activity_create_schedule_category"
             android:theme="@style/MaterialStylesNoTranslucentStatus"></activity>
         <activity
-            android:name=".Creator.TimeRecorder.TimerActivity"
+            android:name=".Creator.TimerActivity"
             android:label="@string/title_activity_timer"
             android:theme="@style/MaterialStylesNoTranslucentStatus"></activity>
     </application>

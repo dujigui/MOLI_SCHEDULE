@@ -15,6 +15,7 @@ import com.pheynix.moli_schedule.Util.DBUtil;
 import com.pheynix.moli_schedule.Item.SummaryDailyItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -46,7 +47,7 @@ public class DailySummaryFragment extends Fragment implements View.OnClickListen
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_summary_daily);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        DailySummaryAdapter mAdapter = new DailySummaryAdapter(getActivity(),dbUtil.getDailySummaryItems());
+        DailySummaryAdapter mAdapter = new DailySummaryAdapter(getActivity(),dbUtil.getSummaryItems(Calendar.getInstance()));
         mRecyclerView.setAdapter(mAdapter);
 
         return view;
