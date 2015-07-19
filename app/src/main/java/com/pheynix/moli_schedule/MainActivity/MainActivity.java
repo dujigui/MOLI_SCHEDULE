@@ -164,9 +164,20 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         }
         if (position == 0){
-            if (fragmentManager.findFragmentByTag("DailySummaryFragment") == null){
+
+            if (fragmentManager.findFragmentByTag("DailySummaryFragment") != null){
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.remove(fragmentManager.findFragmentByTag("DailySummaryFragment"));
+                transaction.commit();
+            }
+            if (fragmentManager.findFragmentByTag("WeeklySummaryFragment") != null){
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.remove(fragmentManager.findFragmentByTag("WeeklySummaryFragment"));
+                transaction.commit();
+            }
+            if (fragmentManager.findFragmentByTag("MonthlySummaryFragment") != null){
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.remove(fragmentManager.findFragmentByTag("MonthlySummaryFragment"));
                 transaction.commit();
             }
         }

@@ -34,7 +34,7 @@ public class DailySummaryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        RelativeLayout item = (RelativeLayout) inflater.inflate(R.layout.summary_daily_item, null);
+        RelativeLayout item = (RelativeLayout) inflater.inflate(R.layout.daily_summary_item, null);
         PercentageBar percentageBar = (PercentageBar) item.findViewById(R.id.pb_summary_daily_item_percentage);
 
         if (viewType == 1){

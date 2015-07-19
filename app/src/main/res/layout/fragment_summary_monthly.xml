@@ -5,6 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.pheynix.moli_schedule.SummaryFragment.MonthlySummaryFragment">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_monthly_summary"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,32 +25,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
 
-        <Button
-            android:text="←"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="日"/>
-
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="→"/>
-
-    </LinearLayout>
 
 </RelativeLayout>

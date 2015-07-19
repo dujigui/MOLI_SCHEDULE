@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.ScheduleFragment.ScheduleFragment;
-import com.pheynix.moli_schedule.SummaryFragment.SummarySchedule;
+import com.pheynix.moli_schedule.SummaryFragment.SummaryFragment;
 
 /**
  * Created by pheynix on 6/24/15.
@@ -29,7 +29,7 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
                 fragment = new ScheduleFragment();
                 break;
             case 1:
-                fragment = new SummarySchedule();
+                fragment = new SummaryFragment();
                 break;
         }
 
