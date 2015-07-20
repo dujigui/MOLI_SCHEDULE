@@ -26,15 +26,11 @@ dependencies {
     compile 'com.android.support:design:22.2.0'//包含MaterialDesign的8个组件
     compile 'com.android.support:cardview-v7:21.0.3'//cardView,使用：weekly_summary_item
 
-    compile 'de.hdodenhof:circleimageview:1.3.0'//圆形ImageView，使用：NavigationDrawer
-
-    compile 'com.wdullaer:materialdatetimepicker:1.3.1'//日期选择器，Support for Android 4.0 and up.
-
-    compile 'com.github.rey5137:material:1.1.1'//Material控件
-
-    compile 'me.drakeet.materialdialog:library:1.2.2'//dialog,考虑自己绘制
-
-    compile 'com.github.lecho:hellocharts-library:1.5.5@aar'//图表控件,weekly_summary_item,monthly_summay_item
+    compile 'de.hdodenhof:circleimageview:1.3.0'//圆形ImageView，使用：NavigationDrawer,考虑自己绘制
+    compile 'com.wdullaer:materialdatetimepicker:1.3.1'//日期选择器，使用于创建日程的时间选择
+    compile 'com.github.rey5137:material:1.1.1'//Material控件,使用于：选择日程类别的spinner
+    compile 'me.drakeet.materialdialog:library:1.2.2'//dialog,使用于：倒计时结束询问用户，考虑自己绘制
+    compile 'com.github.lecho:hellocharts-library:1.5.5@aar'//图表控件,使用于：weekly_summary_item,monthly_summary_item
 
 
 }
