@@ -7,9 +7,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.pheynix.moli_schedule.Item.Category;
-import com.pheynix.moli_schedule.Item.Schedule;
-import com.pheynix.moli_schedule.Item.SummaryDailyItem;
+import com.pheynix.moli_schedule.Model.Category;
+import com.pheynix.moli_schedule.Model.Schedule;
+import com.pheynix.moli_schedule.Model.SummaryDailyItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,6 +51,47 @@ public class DBUtil {
     public DBUtil(Context context) {
         openHelper = new DatabaseOpenHelper(context);
         db = openHelper.getWritableDatabase();
+    }
+
+    public ArrayList<Schedule> getSchedulesNearby() {
+        ArrayList<Schedule> schedules = new ArrayList<>();
+
+        Calendar dayStart = Calendar.getInstance();
+        Calendar dayEnd = Calendar.getInstance();
+
+        dayStart.add(Calendar.DAY_OF_MONTH,-3);
+        dayStart.set(Calendar.HOUR_OF_DAY,0);
+        dayStart.set(Calendar.MINUTE,0);
+        dayStart.set(Calendar.SECOND,0);
+        dayStart.set(Calendar.MILLISECOND,0);
+        dayEnd.add(Calendar.DAY_OF_MONTH,3);
+        dayEnd.set(Calendar.HOUR_OF_DAY,0);
+        dayEnd.set(Calendar.MINUTE,0);
+        dayEnd.set(Calendar.SECOND,0);
+        dayEnd.set(Calendar.MILLISECOND,0);
+
+        //可以null表示选择所有列
+        Cursor cursor = db.query(openHelper.TABLE_NAME_SCHEDULE,
+                null, openHelper.TIME_START + ">? AND "+openHelper.TIME_START+"<?"
+                , new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+""}
+                , null, null, openHelper.TIME_START+" ASC , "+openHelper.STATUS+" ASC");
+
+        while (cursor.moveToNext()) {
+            Schedule schedule = new Schedule();
+            schedule.setId(cursor.getInt(cursor.getColumnIndex(openHelper.UID)));
+            schedule.setCategory(cursor.getString(cursor.getColumnIndex(openHelper.CATEGORY)));
+            schedule.setDetail(cursor.getString(cursor.getColumnIndex(openHelper.DETAIL)));
+            schedule.setTime_start(cursor.getLong(cursor.getColumnIndex(openHelper.TIME_START)));
+            schedule.setTime_recorded(cursor.getLong(cursor.getColumnIndex(openHelper.TIME_RECORDED)));
+            schedule.setTime_last(cursor.getLong(cursor.getColumnIndex(openHelper.TIME_LAST)));
+            schedule.setUrgency(cursor.getInt(cursor.getColumnIndex(openHelper.URGENCY)));
+            schedule.setVibration(getVibration(cursor));//数据库保存值为1或0，有时间测试Boolean.parse是否有效
+            schedule.setVolume(cursor.getInt(cursor.getColumnIndex(openHelper.VOLUME)));
+            schedule.setStatus(cursor.getInt(cursor.getColumnIndex(openHelper.STATUS)));
+            schedules.add(schedule);
+        }
+
+        return schedules;
     }
 
 
@@ -95,6 +136,8 @@ public class DBUtil {
         }
 
     }
+
+
 
 
     //增加日程
@@ -190,20 +233,20 @@ public class DBUtil {
         ArrayList<String> names = getAllCategoryName();
 
         //尝试使用Calendar.clone
-        Calendar dayStart = Calendar.getInstance();
-        Calendar dayEnd = Calendar.getInstance();
-        dayStart.setTimeInMillis(day.getTimeInMillis());
-        dayEnd.setTimeInMillis(day.getTimeInMillis());
+        Calendar timeStart = Calendar.getInstance();
+        Calendar timeEnd = Calendar.getInstance();
+        timeStart.setTimeInMillis(day.getTimeInMillis());
+        timeEnd.setTimeInMillis(day.getTimeInMillis());
 
-        dayStart.set(Calendar.HOUR_OF_DAY,0);
-        dayStart.set(Calendar.MINUTE,0);
-        dayStart.set(Calendar.SECOND,0);
-        dayStart.set(Calendar.MILLISECOND,0);
-        dayEnd.set(Calendar.DAY_OF_MONTH,dayEnd.get(Calendar.DAY_OF_MONTH)+1);
-        dayEnd.set(Calendar.HOUR_OF_DAY,0);
-        dayEnd.set(Calendar.MINUTE,0);
-        dayEnd.set(Calendar.SECOND,0);
-        dayEnd.set(Calendar.MILLISECOND,0);
+        timeStart.set(Calendar.HOUR_OF_DAY,0);
+        timeStart.set(Calendar.MINUTE,0);
+        timeStart.set(Calendar.SECOND,0);
+        timeStart.set(Calendar.MILLISECOND,0);
+        timeEnd.set(Calendar.DAY_OF_MONTH,timeEnd.get(Calendar.DAY_OF_MONTH)+1);
+        timeEnd.set(Calendar.HOUR_OF_DAY,0);
+        timeEnd.set(Calendar.MINUTE,0);
+        timeEnd.set(Calendar.SECOND,0);
+        timeEnd.set(Calendar.MILLISECOND,0);
 
 
         //查询“时间总计”数据
@@ -211,7 +254,7 @@ public class DBUtil {
                 ,new String[]{openHelper.TIME_LAST}
                 ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<? AND "
                 + openHelper.STATUS + "=?"
-                ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+"","3"}
+                ,new String[]{timeStart.getTimeInMillis()+"",timeEnd.getTimeInMillis()+"","3"}
                 ,null,null,null);
         items.add(new SummaryDailyItem("时间总计", getValue(cursor1,1)));
         cursor1.close();
@@ -221,7 +264,7 @@ public class DBUtil {
                 ,new String[]{openHelper.TIME_LAST}
                 ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<? AND "
                 + openHelper.CATEGORY + "=? AND " + openHelper.STATUS + "=?"
-                ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+"","普通日程","3"}
+                ,new String[]{timeStart.getTimeInMillis()+"",timeEnd.getTimeInMillis()+"","普通日程","3"}
                 ,null,null,null);
         items.add(new SummaryDailyItem("普通日程", getValue(cursor2,1)));
         cursor2.close();
@@ -230,7 +273,7 @@ public class DBUtil {
         Cursor cursor5 = db.query(openHelper.TABLE_NAME_SCHEDULE
                 ,new String[]{openHelper.STATUS}
                 ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<?"
-                ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+""}
+                ,new String[]{timeStart.getTimeInMillis()+"",timeEnd.getTimeInMillis()+""}
                 ,null,null,null);
 
         int completed = 0;
@@ -260,7 +303,7 @@ public class DBUtil {
                     ,new String[]{openHelper.TIME_LAST}
                     ,openHelper.TIME_START + ">? AND " + openHelper.TIME_START + "<? AND "
                     + openHelper.CATEGORY + "=?"
-                    ,new String[]{dayStart.getTimeInMillis()+"",dayEnd.getTimeInMillis()+"",names.get(i)}
+                    ,new String[]{timeStart.getTimeInMillis()+"",timeEnd.getTimeInMillis()+"",names.get(i)}
                     ,null,null,null);
             float f1 = getValue(cursor3,2);
             cursor3.close();

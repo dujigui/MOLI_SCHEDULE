@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pheynix.moli_schedule.Item.SummaryDailyItem;
+import com.pheynix.moli_schedule.Model.SummaryDailyItem;
 import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.Util.DBUtil;
 

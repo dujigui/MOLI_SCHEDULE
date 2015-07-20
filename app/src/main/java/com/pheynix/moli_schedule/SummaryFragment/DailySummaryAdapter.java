@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.pheynix.moli_schedule.CustomView.PercentageBar;
 import com.pheynix.moli_schedule.R;
-import com.pheynix.moli_schedule.Item.SummaryDailyItem;
+import com.pheynix.moli_schedule.Model.SummaryDailyItem;
 
 import java.util.ArrayList;
 

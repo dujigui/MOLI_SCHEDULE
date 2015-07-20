@@ -14,7 +14,7 @@ import android.widget.EditText;
 import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.Util.CalendarUtil;
 import com.pheynix.moli_schedule.Util.DBUtil;
-import com.pheynix.moli_schedule.Item.Category;
+import com.pheynix.moli_schedule.Model.Category;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.CheckBox;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;

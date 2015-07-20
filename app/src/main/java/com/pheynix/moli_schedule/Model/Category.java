@@ -1,4 +1,4 @@
-package com.pheynix.moli_schedule.Item;
+package com.pheynix.moli_schedule.Model;
 
 /**
  * 日程类的数据封装

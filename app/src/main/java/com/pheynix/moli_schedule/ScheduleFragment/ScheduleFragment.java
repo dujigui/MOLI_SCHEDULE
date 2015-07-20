@@ -14,11 +14,12 @@ import android.view.ViewGroup;
 
 import com.pheynix.moli_schedule.Creator.CreateSchedule;
 import com.pheynix.moli_schedule.Creator.TimerActivity;
-import com.pheynix.moli_schedule.Item.Schedule;
+import com.pheynix.moli_schedule.Model.Schedule;
 import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.Util.DBUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ScheduleFragment extends Fragment implements View.OnClickListener,ScheduleClickListener {
     public static final int REQUEST_CODE_ALTER_SCHEDULE = 007;
@@ -33,21 +34,25 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
     private FloatingActionButton mFab;
     private DBUtil dbUtil;
     private ArrayList<Schedule> schedules;
+    private LinearLayoutManager layoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
 
         dbUtil = new DBUtil(getActivity());
-        schedules = dbUtil.getAllSchedules();
+//        schedules = dbUtil.getAllSchedules();
+        schedules = dbUtil.getSchedulesNearby();
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_schedule);
         mFab = (FloatingActionButton) view.findViewById(R.id.fab_fragment_schedule);
         mFab.setOnClickListener(this);
 
         //设置recyclerView的layoutManager
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
+        layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.scrollToPosition(getDisplayPosition());
 
         adapter = new ScheduleAdapter(getActivity(),schedules,this);
         mRecyclerView.setAdapter(adapter);
@@ -143,7 +148,31 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener,S
     //更改为public
     public void updateSchedules(){
         schedules.clear();
-        schedules.addAll(dbUtil.getAllSchedules());
+        schedules.addAll(dbUtil.getSchedulesNearby());
+
         adapter.notifyDataSetChanged();
+        mRecyclerView.scrollToPosition(getDisplayPosition());
     }
+
+    public int getDisplayPosition(){
+        int positionToday = 0;
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY,0);
+        today.set(Calendar.MINUTE,0);
+        today.set(Calendar.SECOND,0);
+        today.set(Calendar.MILLISECOND,0);
+
+        for (int i = 0 ; i < schedules.size() ; i++){
+            if (schedules.get(i).getTime_start() > today.getTimeInMillis()
+                    || schedules.get(i).getTime_start() == today.getTimeInMillis()){
+                positionToday = i;
+                break;
+            }
+        }
+        mRecyclerView.scrollToPosition(positionToday+1);
+        return positionToday+1;
+    }
+
 }
+
+

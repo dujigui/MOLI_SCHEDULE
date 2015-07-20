@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.Util.DBUtil;
-import com.pheynix.moli_schedule.Item.SummaryDailyItem;
+import com.pheynix.moli_schedule.Model.SummaryDailyItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;

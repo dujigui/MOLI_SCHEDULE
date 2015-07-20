@@ -1,4 +1,4 @@
-package com.pheynix.moli_schedule.Item;
+package com.pheynix.moli_schedule.Model;
 
 /**
  * Created by pheynix on 7/10/15.

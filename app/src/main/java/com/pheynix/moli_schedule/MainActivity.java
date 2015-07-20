@@ -1,9 +1,11 @@
-package com.pheynix.moli_schedule.MainActivity;
+package com.pheynix.moli_schedule;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -16,17 +18,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pheynix.moli_schedule.R;
+import com.pheynix.moli_schedule.Model.Category;
+import com.pheynix.moli_schedule.Model.Schedule;
 import com.pheynix.moli_schedule.SummaryFragment.DailySummaryFragment;
 import com.pheynix.moli_schedule.SummaryFragment.MonthlySummaryFragment;
 import com.pheynix.moli_schedule.SummaryFragment.WeeklySummaryFragment;
 import com.pheynix.moli_schedule.Util.DBUtil;
-import com.pheynix.moli_schedule.Item.Category;
+
+import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
@@ -36,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private ActionBarDrawerToggle mDrawerToggle;
     private DBUtil dbUtil;
     private FragmentManager fragmentManager;
+    private TextView tv_point;
+    private double point = 0;
+
+    private ArrayList<Schedule> schedules;
 
 
     @Override
@@ -79,6 +88,51 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tabs.setupWithViewPager(mViewPager);
 
         fragmentManager = getSupportFragmentManager();
+
+        tv_point = (TextView) findViewById(R.id.tv_point_main_activity);
+
+        dbUtil = new DBUtil(this);
+        schedules = dbUtil.getAllSchedules();
+        final int sizeOfSchedules = schedules.size();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+
+                for (int i = 0 ; i < sizeOfSchedules ; i++){
+                    Message msg = new Message();
+                    switch (schedules.get(i).getUrgency()){
+                        case 1:
+                            msg.what = 1;
+                            msg.arg1 = i;
+                            msg.arg1 = i;
+                            msg.arg1 = i;
+                            mHandler.sendMessage(msg);
+                            break;
+                        case 2:
+                            msg.what = 2;
+                            msg.arg1 = i;
+                            mHandler.sendMessage(msg);
+                            break;
+                        case 3:
+                            msg.what = 3;
+                            msg.arg1 = i;
+                            mHandler.sendMessage(msg);
+                            break;
+                        case 4:
+                            msg.what = 4;
+                            msg.arg1 = i;
+                            mHandler.sendMessage(msg);
+                            break;
+
+                    }
+
+                }
+            }
+        }).start();
+
 
     }
 
@@ -256,5 +310,29 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         return isFirstLaunch;
     }
+
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what){
+                case 1:
+                    point = point + 2*(schedules.get(msg.arg1).getTime_recorded()/(1000*60));
+                    break;
+                case 2:
+                    point = point + 1.5*schedules.get(msg.arg1).getTime_recorded()/(1000*60);
+                    break;
+                case 3:
+                    point = point + 1*schedules.get(msg.arg1).getTime_recorded()/(1000*60);
+                    break;
+                case 4:
+                    point = point + 0.5*schedules.get(msg.arg1).getTime_recorded()/(1000*60);
+                    break;
+            }
+
+            tv_point.setText((int)point+"");
+        }
+    };
 
 }

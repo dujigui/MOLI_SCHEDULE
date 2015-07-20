@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">茉莉日程</string>
-    <string name="title_activity_main">茉莉日程</string>
+    <string name="app_name">MOLI</string>
+    <string name="title_activity_main">MOLI</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -41,13 +41,14 @@
     <string name="schedule_detail">请输入日程内容</string>
     <string name="time_last">持续时间</string>
     <string name="time_start">开始时间</string>
-    <string name="title_activity_create_schedule_category">新建日程类</string>
+    <string name="title_activity_create_schedule_category">新日程类</string>
 
     <string name="year">年</string>
     <string name="month">月</string>
     <string name="day">日</string>
     <string name="hour">时</string>
     <string name="minute">分</string>
-    <string name="title_activity_timer">TimerActivity</string>
+    <string name="title_activity_timer">计时</string>
+    <string name="title_activity_point">积分纪录</string>
 
 </resources>

@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pheynix.moli_schedule.Item.Schedule;
+import com.pheynix.moli_schedule.Model.Schedule;
 import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.ScheduleFragment.ScheduleFragment;
 import com.pheynix.moli_schedule.Util.CalendarUtil;

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.pheynix.moli_schedule.R;
 import com.pheynix.moli_schedule.Util.DateTimeUtil;
-import com.pheynix.moli_schedule.Item.Schedule;
+import com.pheynix.moli_schedule.Model.Schedule;
 
 import java.util.ArrayList;
 
@@ -42,7 +42,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         currentSchedule = schedules.get(position);
 
         holder.iv_urgency.setImageResource(getUrgencyImage());
-        holder.tv_time_start.setText(DateTimeUtil.longToDate(currentSchedule.getTime_start()));
+//        holder.tv_time_start.setText(DateTimeUtil.longToDate(currentSchedule.getTime_start()));
+        holder.tv_time_start.setText(DateTimeUtil.longToWord(currentSchedule.getTime_start()));
         holder.tv_time_last.setText(DateTimeUtil.longToTime(currentSchedule.getTime_last()));
         holder.tv_schedule_detail.setText(currentSchedule.getDetail());
 
